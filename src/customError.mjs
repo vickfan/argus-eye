@@ -4,19 +4,26 @@ export class CustomError extends Error {
   static createErrorTemplate(error) {
     const status = error.status
     const detailedErrorObj = JSON.parse(error.message).error
+    console.error(detailedErrorObj)
 
     let output
-    switch (status) {
+    switch (detailedErrorObj.code) {
       // INVALID_ARGUMENT
       case 400:
+        output = this._format400Error(detailedErrorObj)
+        break
 
       // UNAUTHENTICATED / PERMISSION_DENIED
       case 401:
       case 403:
+        output = this._format401Error(detailedErrorObj)
+        break
 
       // NOT_FOUND
       case 404:
-
+        output = this._format404Error(detailedErrorObj)
+        break
+    
       // RESOURCE_EXHAUSTED
       case 429:
         output = this._format429Error(detailedErrorObj)
@@ -25,9 +32,12 @@ export class CustomError extends Error {
       // INTERNAL / UNAVAILABLE
       case 500:
       case 503:
+        output = this._format500Error(detailedErrorObj)
+        break
 
       default:
-        output = 'Unhandled error'
+        output = 'Unhandled error: ' + detailedErrorObj.message
+        break
     }
 
     return output
@@ -73,7 +83,7 @@ export class CustomError extends Error {
 
   static _format429Error(error) {
     const statusCode = error.status
-    const retryInfo = error.details.find(
+    const retryInfo = error?.details?.find(
       (detail) =>
         detail['@type'] === 'type.googleapis.com/google.rpc.RetryInfo',
     )
