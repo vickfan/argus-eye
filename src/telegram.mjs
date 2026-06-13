@@ -15,7 +15,7 @@ export class Telegram {
   async sendMessage(message) {
     const body = {
       chat_id: this.chatId,
-      text: message,
+      text: message.replace('_', ' '),
       parse_mode: 'Markdown'
     }
 
@@ -25,6 +25,7 @@ export class Telegram {
         JSON.stringify(body),
       )
       if (response.status !== 200) {
+        console.log(JSON.stringify(response.data, null, 2))
         throw new Error(`Failed to send message to Telegram: ${response.statusText}`)
       }
     } catch (error) {
