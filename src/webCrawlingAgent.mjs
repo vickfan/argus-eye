@@ -1,6 +1,7 @@
 import { chromium } from 'playwright'
 import { GoogleGenAI, Type } from '@google/genai'
 import { webCrawlingPrompt } from './prompt.mjs'
+import { Helpers } from './helpers.mjs'
 
 export class WebCrawlingAgent { 
   constructor({
@@ -158,10 +159,10 @@ export class WebCrawlingAgent {
     return payload
   }
 
-  close() {
-    this.page.close()
-    this.context.close()
-    this.browser.close()
+  async close() {
+    await this.page.close(),
+    await this.context.close(),
+    await this.browser.close()
   }
 
   getAi() {

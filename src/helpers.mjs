@@ -5,7 +5,7 @@ export class Helpers {
   constructor() { }
   
   static sleep(ms = 4000) {
-    new Promise(resolve => {
+    return new Promise(resolve => {
       setTimeout(resolve, ms)
     })
   }
