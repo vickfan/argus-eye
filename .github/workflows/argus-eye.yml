@@ -12,6 +12,9 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+    
+    container:
+      image: mcr.microsoft.com/playwright:v1.60.0-noble
 
     steps:
     - name: Checkout Repository
@@ -24,9 +27,11 @@ jobs:
         cache: 'npm'
 
     - name: Install Dependencies
+      env:
+        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       run: npm ci
 
-    - name: Run Telegram Test Script
+    - name: Run Argus Eye
       env:
         # secrets
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
