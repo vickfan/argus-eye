@@ -19,6 +19,7 @@ async function main() {
   })
 
   let webCrawlingAgent = null
+  let message = ''
   try {
     webCrawlingAgent = new WebCrawlingAgent({
       urls: researchUrls,
@@ -36,14 +37,19 @@ async function main() {
       ai,
       topic: resultTopic,
     })
-    const aiResponse = await digestingAgent.digest(webCrawlingResults)
+    message = await digestingAgent.digest(webCrawlingResults)
 
     await telegram.sendMessage(aiResponse)
   } catch (error) {
-    const errorTemplate = CustomError.createErrorTemplate(error)
-    await telegram.sendMessage(errorTemplate)
+    message = CustomError.createErrorTemplate(error)
   } finally { 
     await webCrawlingAgent.close()
+  }
+
+  try {
+    await telegram.sendMessage(message, 'HTML')
+  } catch (error) {
+    console.error(error)
   }
 }
 

@@ -12,13 +12,14 @@ export class Telegram {
     })
   }
 
-  async sendMessage(message) {
+  async sendMessage(message, parseMode = 'Markdown') {
     const body = {
       chat_id: this.chatId,
       text: message.replace('_', ' '),
-      parse_mode: 'Markdown'
+      parse_mode: parseMode
     }
 
+    console.log(body)
     try {
       const response = await this.axios.post(
         '/sendMessage',
@@ -35,5 +36,20 @@ export class Telegram {
 
   getAxios() {
     return this.axios
+  }
+
+  static htmlFormatter() {
+    return {
+      bold: (text) => `<b>${text}</b>`,
+      italic: (text) => `<i>${text}</i>`,
+      underline: (text) => `<u>${text}</u>`,
+      strikethrough: (text) => `<s>${text}</s>`,
+      code: (text) => `<code>${text}</code>`,
+      quote: (text) => `<blockquote>${text}</blockquote>`,
+      blockCode: (text) =>
+        `<pre><code class="language-json">${text}</code></pre>`,
+      lineBreak: () => `\n`,
+      divider: () => `⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯`,
+    }
   }
 }
