@@ -25,9 +25,11 @@ jobs:
 
     - name: Run Telegram Test Script
       env:
+        # secrets
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        RESEARCH_TOPIC: ${{ secrets.RESEARCH_TOPIC }}
-        RESEARCH_URLS: ${{ secrets.RESEARCH_URLS }}
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        # variables
+        RESEARCH_TOPIC: ${{ variables.RESEARCH_TOPIC }}
+        RESEARCH_URLS: ${{ variables.RESEARCH_URLS }}
       run: node index.mjs
