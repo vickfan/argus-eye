@@ -30,6 +30,6 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         # variables
-        RESEARCH_TOPIC: ${{ variables.RESEARCH_TOPIC }}
-        RESEARCH_URLS: ${{ variables.RESEARCH_URLS }}
+        RESEARCH_TOPIC: ${{ vars.RESEARCH_TOPIC }}
+        RESEARCH_URLS: ${{ vars.RESEARCH_URLS }}
       run: node index.mjs
