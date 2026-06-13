@@ -2,7 +2,13 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export class Helpers {
-  constructor() {}
+  constructor() { }
+  
+  static sleep(ms = 4000) {
+    new Promise(resolve => {
+      setTimeout(resolve, ms)
+    })
+  }
 
   static ensureEnvVariable() {
     const geminiApiKey = process.env.GEMINI_API_KEY
