@@ -29,21 +29,16 @@ async function main() {
     })
     const ai = webCrawlingAgent.getAi()
 
-    await webCrawlingAgent.launchBrowser()
-    const webCrawlingResults = await webCrawlingAgent.crawlAllUrls()
-    await webCrawlingAgent.close()
+    const webCrawlingResults = await webCrawlingAgent.startCrawling()
 
-    const digestingAgent = new DigestingAgent({
-      ai,
-      topic: resultTopic,
-    })
-    message = await digestingAgent.digest(webCrawlingResults)
-
-    await telegram.sendMessage(aiResponse)
+    console.log(JSON.stringify(webCrawlingResults, null, 2))
+    // const digestingAgent = new DigestingAgent({
+    //   ai,
+    //   topic: resultTopic,
+    // })
+    // message = await digestingAgent.digest(webCrawlingResults)
   } catch (error) {
     message = CustomError.createErrorTemplate(error)
-  } finally { 
-    await webCrawlingAgent.close()
   }
 
   try {

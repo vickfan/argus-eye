@@ -1,14 +1,17 @@
 import { chromium } from 'playwright'
 import { GoogleGenAI, Type } from '@google/genai'
-import { webCrawlingPrompt } from './prompt.mjs'
+import { webCrawlingPrompt, webCrawlingPromptForX } from './prompt.mjs'
 import { Helpers } from './helpers.mjs'
+import { ContextInjector } from './contextInjector.mjs'
+import { WebCrawlingFunction } from './webCrawlingFunction.mjs'
+import { XCrawler } from './crawler/xCrawler.mjs'
 
 export class WebCrawlingAgent { 
   constructor({
     urls,
     topic,
     geminiApiKey,
-    model = 'gemini-2.5-flash',
+    model = 'gemini-3-flash-preview',
   }) {
     this.urls = urls
     this.topic = topic
@@ -16,93 +19,74 @@ export class WebCrawlingAgent {
       apiKey: geminiApiKey,
     })
     this.model = model
+  }
 
-    this.functions = {
-      getCurrentPageText: async () => {
-        const rawText = await this.page.evaluate(() => document.body.innerText)
-        const cleanedText = rawText.replace(/\s+/g, ' ').substring(0, 12000)
+  async startCrawling() {
+    let masterPayload = []
+    this.browser = await chromium.launch({
+      headless: false,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    })
 
-        const interactiveElements = await this.page.evaluate(() => {
-          const elements = Array.from(document.querySelectorAll('a, button'))
-          return elements.map(element => {
-            const text = (element.innerText || element.textContent || '').trim().substring(0, 30)
-            let selector = element.tagName.toLowerCase()
-            if (element.id) {
-              selector += `#${element.id}`
-            } else if (element.className) {
-              selector += `.${element.className.trim().split(/\s+/)[0]}`
-            }
+    for (const url of this.urls) {
+      if (!url) {
+        break
+      }
+      const type = this.getType(url)
+      let crawler = null
+      switch (type) {
+        case 'x':
+          crawler = new XCrawler({
+            browser: this.browser,
+            goal: this.topic,
+            url,
+          })
+          break
+        
+        default:
+          throw new Error(`unsupported url type: ${type}`)
+      }
 
-            if (text.toLowerCase() === 'more') {
-              selector = 'a.morelink'
-            }
-
-            return { text, selector}
-          }).filter(item => {
-            return item.text.length > 1 && item.selector.length > 1
-          }).slice(0, 40)
-        })
-
-        return {
-          page_text: cleanedText,
-          available_clickable_selectors: interactiveElements,
-        }
-      },
-      clickButton: async ({ selector }) => {
-        try {
-          await this.page.waitForSelector(selector, { timeout: 5000 })
-
-          await this.page.$eval(selector, (element) => element.scrollIntoView())
-          await this.page.click(selector)
-
-          await this.page.waitForLoadState('domcontentloaded')
-          await this.page.waitForTimeout(1000)
-
-          return { success: true, message: `成功點擊 ${selector}` }
-        } catch (error) {
-          return { success: false, message: `點擊失敗: ${error.message}` }
-        }
-      },
+      if (crawler) {
+        const data = await crawler.crawl()
+        masterPayload = masterPayload.concat(data)
+      }
     }
-    this.tools = [
-      {
-        functionDeclarations: [
-          {
-            name: 'getCurrentPageText',
-            description:
-              '獲取當前網頁的所有純文字內容，以及當前頁面所有可點擊元素的 CSS Selector 清單。',
-            parameters: { type: Type.OBJECT, properties: {} },
-          },
-          {
-            name: 'clickButton',
-            description:
-              '根據 getCurrentPageText 提供 的 available_clickable_selectors 清單，傳入選定的 CSS Selector 進行點擊跳轉。',
-            parameters: {
-              type: Type.OBJECT,
-              properties: {
-                selector: {
-                  type: Type.STRING,
-                  description: '目標元素的 CSS Selector，必須精確。',
-                },
-              },
-              required: ['selector'],
-            },
-          },
-        ],
-      },
-    ]
+
+    this.close()
+    return masterPayload
+  }
+
+  getType(url) {
+    if (url.includes('x.com')) { 
+      return 'x'
+    }
+    return 'ai'
   }
 
   async launchBrowser() {
     this.browser = await chromium.launch({
-      headless: true,
+      headless: false,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     })
-    this.context = await this.browser.newContext({
-      userAgent:
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    })
-    this.page = await this.context.newPage()
+    // this.webCrawlingFunction = new WebCrawlingFunction(this.page)
+
+    // this.functions = {
+    //   getCurrentPageText: this.webCrawlingFunction.getCurrentPageText,
+    //   clickButton: this.webCrawlingFunction.clickButton,
+    //   scrollPageDown: (args) => this.webCrawlingFunction.scrollPageDown(args),
+    //   getTweets: (args) => this.webCrawlingFunction.getTweets(args),
+    // }
+    // this.tools = [
+    //   {
+    //     functionDeclarations: [
+    //       this.webCrawlingFunction.tweetsDeclaration,
+    //       this.webCrawlingFunction.scrollPageDownDeclaration,
+    //       this.webCrawlingFunction.currentPageTextDeclaration,
+    //       this.webCrawlingFunction.clickButtonDeclaration,
+    //     ],
+    //   },
+    // ]
   }
 
   async crawlAllUrls() { 
@@ -112,12 +96,17 @@ export class WebCrawlingAgent {
   }
 
   async _crawl(url) {
+    await this.contextInjector.injectContext(url)
     await this.page.goto(url)
+    let prompt = webCrawlingPrompt
+    if (ContextInjector.isX(url)) {
+      prompt = webCrawlingPromptForX
+    }
 
     const chat = this.ai.chats.create({
       model: this.model,
       config: {
-        systemInstruction: webCrawlingPrompt,
+        systemInstruction: prompt,
         tools: this.tools
       }
     })
@@ -131,15 +120,29 @@ export class WebCrawlingAgent {
     while (keepGoing && currentLoop < maxLoop) { 
       currentLoop++
       console.log(`AI thinking... (${currentLoop}/${maxLoop})`)
+      await Helpers.sleep(7000)
+      console.log('message')
+      console.log(message)
       const response = await chat.sendMessage({ message })
       
       if (response.functionCalls && response.functionCalls.length > 0) { 
         const functionCall = response.functionCalls[0]
         const { name, args } = functionCall
+        console.log(`calling function ${name}`)
 
         if (this.functions[name]) {
-          const result = await this.functions[name](args)
-          message = [{ functionResponse: { name, response: result } }]
+          const result = (await this.functions[name](args)) || {
+            status: 'success',
+            message: 'Action completed but returned no data.',
+          }
+          message = {
+            functionResponses: [
+              {
+                name,
+                response: result,
+              }
+            ]
+          }
           await Helpers.sleep(4000)
         } else {
           keepGoing = false
@@ -160,14 +163,12 @@ export class WebCrawlingAgent {
   }
 
   async close() {
-    await this.page.close(),
-    await this.context.close(),
-    await this.browser.close()
+    if (this.browser) {
+      await this.browser.close()
+    }
   }
 
   getAi() {
     return this.ai
   }
-
-
 }
