@@ -31,20 +31,86 @@ async function main() {
 
     const webCrawlingResults = await webCrawlingAgent.startCrawling()
 
-    console.log(JSON.stringify(webCrawlingResults, null, 2))
-    // const digestingAgent = new DigestingAgent({
-    //   ai,
-    //   topic: resultTopic,
-    // })
-    // message = await digestingAgent.digest(webCrawlingResults)
+    const feedMap = new Map()
+    const cleanedFeeds = webCrawlingResults.map((feed, index) => {
+      const feedId = `feed_${index}`
+
+      feedMap.set(feedId, feed)
+
+      return {
+        feed_id: feedId, // 給它一個臨時 ID，方便未來比對
+        time: feed.time, // 傳入你 parseInt 成功後的 timestamp
+        title: feed.title, // 新聞標題
+        desc: feed.desc, // 新聞內容描述
+      }
+    })
+
+    const digestingAgent = new DigestingAgent({
+      ai,
+      topic: resultTopic,
+      geminiApiKey,
+    })
+    const rawDigestingResults = await digestingAgent.digest(JSON.stringify(cleanedFeeds))
+
+    const digestingResults = JSON.parse(rawDigestingResults)
+
+    const finalTransfers = digestingResults.transfers.map((transfer) => {
+      const relatedFeedIds = transfer.related_feed_ids || []
+      let source_urls = []
+      let media_urls = []
+
+      relatedFeedIds.forEach((feedId) => {
+        const feed = feedMap.get(feedId)
+        if (feed) {
+          source_urls.push(feed.source_url)
+          media_urls.push(...feed.media_urls)
+        }
+      })
+
+      const uniqueSourceUrls = Array.from(new Set(source_urls))
+      const uniqueMediaUrls = Array.from(new Set(media_urls))
+
+      return {
+        player_name: transfer.player_name,
+        clubs_involved: transfer.clubs_involved,
+        status: transfer.status,
+        headline_hk: transfer.headline_hk,
+        bullet_points: transfer.bullet_points,
+        source_url: uniqueSourceUrls ?? [],
+        media_urls: uniqueMediaUrls ?? [],
+      }
+    })
+
+    const finalMatches = digestingResults.world_cup_matches.map((match) => {
+      const relatedFeedIds = match.related_feed_ids || []
+      let source_urls = []
+      let media_urls = []
+      relatedFeedIds.forEach((feedId) => {
+        const feed = feedMap.get(feedId)
+        if (feed) {
+          source_urls.push(feed.source_url)
+          media_urls.push(...feed.media_urls)
+        }
+      })
+
+      const uniqueSourceUrls = Array.from(new Set(source_urls))
+      const uniqueMediaUrls = Array.from(new Set(media_urls))
+
+      return {
+        teams_involved: match.teams_involved,
+        points: match.points,
+        bullet_points: match.bullet_points,
+        source_urls: uniqueSourceUrls ?? [],
+        media_urls: uniqueMediaUrls ?? [],
+      }
+    })
+
+    await telegram.sendTransferReport(finalTransfers)
+    await telegram.sendWorldCupReport(finalMatches)
+    message = ''
   } catch (error) {
     message = CustomError.createErrorTemplate(error)
-  }
-
-  try {
     await telegram.sendMessage(message, 'HTML')
-  } catch (error) {
-    console.error(error)
   }
 }
 

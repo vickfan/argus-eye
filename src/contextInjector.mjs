@@ -3,17 +3,36 @@ export class ContextInjector {
     this.context = context
   }
 
+  static getContextOptions(url) {
+    if (ContextInjector.isRequireStealth(url)) {
+      return {
+        locale: 'zh-HK',
+        geolocation: { longitude: 114.1694, latitude: 22.3193 },
+        permissions: ['geolocation'],
+      }
+    }
+
+    return {}
+  }
+
   async injectContext(url) {
     const cookies = []
+
     if (ContextInjector.isX(url)) {
       cookies.push(this.getXCookies())
     }
 
-    await this.context.addCookies(cookies)
+    if (cookies.length > 0) {
+      await this.context.addCookies(cookies)
+    }
   }
 
   static isX(url) {
     return url.includes('x.com')
+  }
+
+  static isRequireStealth(url) {
+    return url.includes('egazette.gld.gov.hk')
   }
 
   getXCookies() {

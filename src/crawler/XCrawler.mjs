@@ -13,8 +13,8 @@ export class XCrawler extends BaseCrawler {
     await this.page.goto(this.url)
 
     while (!this.exit) {
-      const { tweets, shouldExit } = await this.getTweets()
-      results.push(...tweets)
+      const { feeds, shouldExit } = await this.getFeeds()
+      results.push(...feeds)
       if (shouldExit) {
         this.exit = true
         break
@@ -26,7 +26,7 @@ export class XCrawler extends BaseCrawler {
     return results
   }
 
-  async getTweets() {
+  async getFeeds() {
     return await this.page.evaluate((recency) => {
       const tweetArticles = document.querySelectorAll(
         'article[data-testid="tweet"]',
@@ -53,6 +53,9 @@ export class XCrawler extends BaseCrawler {
         if (new Date(datetime) < crawLimitDate && !isPinned) {
           shouldExit = true
           break
+        } else if (new Date(datetime) < crawLimitDate && isPinned) {
+          // skip old pinned tweets
+          continue
         }
 
         const textEl = article.querySelector('[data-testid="tweetText"]')
@@ -82,15 +85,15 @@ export class XCrawler extends BaseCrawler {
         if (text || mediaUrls.length > 0) {
           results.push({
             time: datetime,
-            content: text,
-            tag: isPinned ? 'pin' : 'reg',
-            tweet_url: tweetLink || window.location.href, // 🔴 塞入剛剛撈到嘅 Tweet Link
+            title: text,
+            desc: null,
+            source_url: tweetLink || window.location.href, // 🔴 塞入剛剛撈到嘅 Tweet Link
             media_urls: mediaUrls, // 🔴 塞入撈到嘅圖片 Array
           })
         }
       }
 
-      return { tweets: results, shouldExit }
+      return { feeds: results, shouldExit }
     }, crawlRecency)
   }
 

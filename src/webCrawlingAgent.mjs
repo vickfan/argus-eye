@@ -5,6 +5,7 @@ import { Helpers } from './helpers.mjs'
 import { ContextInjector } from './contextInjector.mjs'
 import { WebCrawlingFunction } from './webCrawlingFunction.mjs'
 import { XCrawler } from './crawler/xCrawler.mjs'
+import { SkySportsCrawler } from './crawler/SkySportsCrawler.mjs'
 
 export class WebCrawlingAgent { 
   constructor({
@@ -28,15 +29,24 @@ export class WebCrawlingAgent {
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     })
 
-    for (const url of this.urls) {
+    await Promise.all(this.urls.map(async url => {
       if (!url) {
-        break
+        return
       }
+
       const type = this.getType(url)
       let crawler = null
       switch (type) {
         case 'x':
           crawler = new XCrawler({
+            browser: this.browser,
+            goal: this.topic,
+            url,
+          })
+          break
+      
+        case 'skysports':
+          crawler = new SkySportsCrawler({
             browser: this.browser,
             goal: this.topic,
             url,
@@ -51,7 +61,7 @@ export class WebCrawlingAgent {
         const data = await crawler.crawl()
         masterPayload = masterPayload.concat(data)
       }
-    }
+    }))
 
     this.close()
     return masterPayload
@@ -60,6 +70,9 @@ export class WebCrawlingAgent {
   getType(url) {
     if (url.includes('x.com')) { 
       return 'x'
+    }
+    if (url.includes('skysports.com')) {
+      return 'skysports'
     }
     return 'ai'
   }

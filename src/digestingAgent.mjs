@@ -2,15 +2,12 @@ import { GoogleGenAI, Type } from '@google/genai'
 import { digestingPrompt } from './prompt.mjs'
 
 export class DigestingAgent {
-  constructor({
-    geminiApiKey,
-    ai,
-    model = 'gemini-2.5-flash',
-    topic
-  }) {
-    this.ai = ai ?? new GoogleGenAI({
-      apiKey: geminiApiKey,
-    })
+  constructor({ geminiApiKey, ai, model = 'gemini-2.5-flash', topic }) {
+    this.ai =
+      ai ??
+      new GoogleGenAI({
+        apiKey: geminiApiKey,
+      })
     this.model = model
     this.prompt = digestingPrompt
     this.topic = topic
@@ -24,60 +21,72 @@ export class DigestingAgent {
         responseMimeType: 'application/json',
         responseSchema: this.schema,
       },
-      content: `【用戶監控目標】: ${this.topic}\n\n【Crawler 帶回來的網頁原始文字】:\n${text}`,
+      content: text,
     })
     return aiResponse.text
   }
 
+  // 🎯 請將你 DigestingAgent.mjs 裡面的 schema 修改為以下結構：
   get schema() {
     return {
       type: Type.OBJECT,
       properties: {
-        status: {
-          type: Type.STRING,
-          description:
-            "必須為 'SUCCESS' 或 'FAILED'。如果找到符合用戶目標的資料填 SUCCESS，找不到或資料不足填 FAILED。",
-        },
-        reason: {
-          type: Type.STRING,
-          description:
-            "成功或失敗的原因摘要（例如：'成功在第二頁找到3條超過100分的文章' 或 '網頁文字中未見任何超過100分的數據'）。",
-        },
-        extracted_data: {
+        report_date: { type: Type.STRING },
+        transfers: {
           type: Type.ARRAY,
-          description:
-            '提取出來符合用戶監控目標的情報列表。如果 status 為 FAILED，此陣列留空 []。',
           items: {
             type: Type.OBJECT,
             properties: {
-              rank: {
-                type: Type.STRING,
-                description: "資訊在網頁上的排名或順序編號（例如 '31'）",
-              },
-              title: {
-                type: Type.STRING,
-                description: '情報的核心標題或專案名稱',
-              },
-              link: {
-                type: Type.STRING,
+              // 🔒 核心錨點：讓 Gemini 告訴我們它是看哪條 feed 寫的
+              related_feed_ids: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING },
                 description:
-                  '相關的網址連結（必須從原始文字中精確提取，不可自行發明）',
+                  "這條轉會消息源自哪一個或哪幾個 feed_id，必須從輸入數據中精確提取（例如 ['feed_0']）",
               },
-              score: {
-                type: Type.INTEGER,
-                description: '指標分數、熱度、價格或點數（純數字，例如 150）',
-              },
-              additional_info: {
-                type: Type.STRING,
-                description:
-                  '任何額外的有用備註（如發布時間、作者等），如無可填空字串',
-              },
+              player_name: { type: Type.STRING },
+              clubs_involved: { type: Type.STRING },
+              status: { type: Type.STRING },
+              headline_hk: { type: Type.STRING },
+              bullet_points: { type: Type.ARRAY, items: { type: Type.STRING } },
+              // 💡 這裡不需要叫 Gemini 回傳 source_url 欄位了，我們在外層自己接
             },
-            required: ['rank', 'title', 'link', 'score'],
+            required: [
+              'related_feed_ids',
+              'player_name',
+              'clubs_involved',
+              'status',
+              'headline_hk',
+              'bullet_points',
+            ],
+          },
+        },
+        world_cup_matches: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              // 🔒 核心錨點：一場波通常會聚合多條 feeds 嘅 ID
+              related_feed_ids: {
+                type: Type.ARRAY,
+                items: { type: Type.STRING },
+                description:
+                  "所有與這場賽事相關的 feed_id 陣列（例如 ['feed_2', 'feed_5']）",
+              },
+              teams_involved: { type: Type.STRING },
+              points: { type: Type.STRING },
+              bullet_points: { type: Type.ARRAY, items: { type: Type.STRING } },
+            },
+            required: [
+              'related_feed_ids',
+              'teams_involved',
+              'points',
+              'bullet_points',
+            ],
           },
         },
       },
-      required: ['status', 'reason', 'extracted_data'],
+      required: ['report_date', 'transfers', 'world_cup_matches'],
     }
   }
 }
