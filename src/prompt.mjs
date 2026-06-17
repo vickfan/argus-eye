@@ -30,7 +30,7 @@ const webCrawlingPromptForX = `
 5. 如果畫面彈出「請登入 (Login / Sign in)」的阻擋字眼，請立刻停止呼叫 Tool，並回報 "DETECTED_LOGIN_WALL"。
 `
 
-export const digestingPrompt = `
+const digestingPrompt = `
 你是一個專業的足球新聞數據蒸餾專家。你的任務是處理從體育新聞網站抓取回來的原始文本數據（Feed Collection）。
 傳入的每一條數據都帶有一個物理識別碼 "feed_id"（例如 "feed_0", "feed_1"）。
 

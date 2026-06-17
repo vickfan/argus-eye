@@ -3,15 +3,21 @@ name: Argus Eye
 on:
   schedule:
     - cron: '0 6 * * *'
+      timezone: Asia/Hong_Kong
 
   workflow_dispatch:
 
   repository_dispatch:
     types: [ios-trigger]
 
+concurrency:
+  group: argus-eye
+  cancel-in-progress: true
+
 jobs:
   run:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     container:
       image: mcr.microsoft.com/playwright:v1.60.0-noble
@@ -19,8 +25,6 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
-      with:
-        ref: uat
 
     - name: Setup Node.js
       uses: actions/setup-node@v4

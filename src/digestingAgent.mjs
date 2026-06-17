@@ -21,7 +21,7 @@ export class DigestingAgent {
         responseMimeType: 'application/json',
         responseSchema: this.schema,
       },
-      content: text,
+      contents: text,
     })
     return aiResponse.text
   }
