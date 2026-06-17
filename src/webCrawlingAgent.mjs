@@ -3,7 +3,6 @@ import { GoogleGenAI, Type } from '@google/genai'
 import { webCrawlingPrompt, webCrawlingPromptForX } from './prompt.mjs'
 import { Helpers } from './helpers.mjs'
 import { ContextInjector } from './contextInjector.mjs'
-import { WebCrawlingFunction } from './webCrawlingFunction.mjs'
 import { XCrawler } from './crawler/xCrawler.mjs'
 import { SkySportsCrawler } from './crawler/SkySportsCrawler.mjs'
 
