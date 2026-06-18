@@ -47,4 +47,5 @@ jobs:
         # variables
         RESEARCH_TOPIC: ${{ vars.RESEARCH_TOPIC }}
         RESEARCH_URLS: ${{ vars.RESEARCH_URLS }}
+        NODE_ENV: ${{ vars.NODE_ENV }}
       run: node index.mjs
