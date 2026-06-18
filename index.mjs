@@ -3,6 +3,13 @@ import { Helpers } from './src/helpers.mjs'
 import { WebCrawlingAgent } from './src/webCrawlingAgent.mjs'
 import { DigestingAgent } from './src/digestingAgent.mjs'
 import { CustomError } from './src/customError.mjs'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+const NODE_ENV = process.env.NODE_ENV
+const isUAT = NODE_ENV === 'UAT'
+const isPROD = NODE_ENV === 'PROD'
 
 async function main() {
   const {
@@ -45,69 +52,76 @@ async function main() {
       }
     })
 
-    const digestingAgent = new DigestingAgent({
-      ai,
-      topic: resultTopic,
-      geminiApiKey,
-    })
-    const rawDigestingResults = await digestingAgent.digest(JSON.stringify(cleanedFeeds))
+    if (isUAT) {
+      console.log(cleanedFeeds)
+    }
 
-    const digestingResults = JSON.parse(rawDigestingResults)
+    if (isPROD) {
+      const digestingAgent = new DigestingAgent({
+        ai,
+        topic: resultTopic,
+        geminiApiKey,
+      })
+      const rawDigestingResults = await digestingAgent.digest(
+        JSON.stringify(cleanedFeeds),
+      )
 
-    const finalTransfers = digestingResults.transfers.map((transfer) => {
-      const relatedFeedIds = transfer.related_feed_ids || []
-      let source_urls = []
-      let media_urls = []
+      const digestingResults = JSON.parse(rawDigestingResults)
 
-      relatedFeedIds.forEach((feedId) => {
-        const feed = feedMap.get(feedId)
-        if (feed) {
-          source_urls.push(feed.source_url)
-          media_urls.push(...feed.media_urls)
+      const finalTransfers = digestingResults.transfers.map((transfer) => {
+        const relatedFeedIds = transfer.related_feed_ids || []
+        let source_urls = []
+        let media_urls = []
+
+        relatedFeedIds.forEach((feedId) => {
+          const feed = feedMap.get(feedId)
+          if (feed) {
+            source_urls.push(feed.source_url)
+            media_urls.push(...feed.media_urls)
+          }
+        })
+
+        const uniqueSourceUrls = Array.from(new Set(source_urls))
+        const uniqueMediaUrls = Array.from(new Set(media_urls))
+
+        return {
+          player_name: transfer.player_name,
+          clubs_involved: transfer.clubs_involved,
+          status: transfer.status,
+          headline_hk: transfer.headline_hk,
+          bullet_points: transfer.bullet_points,
+          source_url: uniqueSourceUrls ?? [],
+          media_urls: uniqueMediaUrls ?? [],
         }
       })
 
-      const uniqueSourceUrls = Array.from(new Set(source_urls))
-      const uniqueMediaUrls = Array.from(new Set(media_urls))
+      const finalMatches = digestingResults.world_cup_matches.map((match) => {
+        const relatedFeedIds = match.related_feed_ids || []
+        let source_urls = []
+        let media_urls = []
+        relatedFeedIds.forEach((feedId) => {
+          const feed = feedMap.get(feedId)
+          if (feed) {
+            source_urls.push(feed.source_url)
+            media_urls.push(...feed.media_urls)
+          }
+        })
 
-      return {
-        player_name: transfer.player_name,
-        clubs_involved: transfer.clubs_involved,
-        status: transfer.status,
-        headline_hk: transfer.headline_hk,
-        bullet_points: transfer.bullet_points,
-        source_url: uniqueSourceUrls ?? [],
-        media_urls: uniqueMediaUrls ?? [],
-      }
-    })
+        const uniqueSourceUrls = Array.from(new Set(source_urls))
+        const uniqueMediaUrls = Array.from(new Set(media_urls))
 
-    const finalMatches = digestingResults.world_cup_matches.map((match) => {
-      const relatedFeedIds = match.related_feed_ids || []
-      let source_urls = []
-      let media_urls = []
-      relatedFeedIds.forEach((feedId) => {
-        const feed = feedMap.get(feedId)
-        if (feed) {
-          source_urls.push(feed.source_url)
-          media_urls.push(...feed.media_urls)
+        return {
+          teams_involved: match.teams_involved,
+          points: match.points,
+          bullet_points: match.bullet_points,
+          source_urls: uniqueSourceUrls ?? [],
+          media_urls: uniqueMediaUrls ?? [],
         }
       })
 
-      const uniqueSourceUrls = Array.from(new Set(source_urls))
-      const uniqueMediaUrls = Array.from(new Set(media_urls))
-
-      return {
-        teams_involved: match.teams_involved,
-        points: match.points,
-        bullet_points: match.bullet_points,
-        source_urls: uniqueSourceUrls ?? [],
-        media_urls: uniqueMediaUrls ?? [],
-      }
-    })
-
-    await telegram.sendTransferReport(finalTransfers)
-    await telegram.sendWorldCupReport(finalMatches)
-    message = ''
+      await telegram.sendTransferReport(finalTransfers)
+      await telegram.sendWorldCupReport(finalMatches)
+    }
   } catch (error) {
     message = CustomError.createErrorTemplate(error)
     await telegram.sendMessage(message, 'HTML')

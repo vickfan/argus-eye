@@ -8,7 +8,10 @@ import { SkySportsCrawler } from './crawler/SkySportsCrawler.mjs'
 import { MarcaCrawler } from './crawler/MarcaCrawler.mjs'
 import { BildRssCrawler } from './crawler/BildRssCrawler.mjs'
 import { MarcaRssCrawler } from './crawler/MarcaRssCrawler.mjs'
-
+import dotenv from 'dotenv'
+dotenv.config()
+const NODE_ENV = process.env.NODE_ENV
+const isPROD = NODE_ENV === 'PROD'
 export class WebCrawlingAgent { 
   constructor({
     urls,
@@ -27,7 +30,7 @@ export class WebCrawlingAgent {
   async startCrawling() {
     let masterPayload = []
     this.browser = await chromium.launch({
-      headless: true,
+      headless: isPROD,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     })
 
