@@ -50,6 +50,7 @@ async function main() {
       topic: resultTopic,
       geminiApiKey,
     })
+    console.log('cleanedFeeds', cleanedFeeds)
     const rawDigestingResults = await digestingAgent.digest(JSON.stringify(cleanedFeeds))
 
     const digestingResults = JSON.parse(rawDigestingResults)
