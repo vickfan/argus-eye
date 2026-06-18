@@ -21,6 +21,10 @@ export class BaseCrawler {
     })
 
     this.page = await this.context.newPage()
+    // this.page.on('console', (msg) => {
+    //   // 💡 幫瀏覽器入面傳出嚟嘅 Log 加個 [BROWSER] 標籤，方便同 Node.js 嘅 Log 區分
+    //   console.log(`🌐 [BROWSER LOG]: ${msg.text()}`)
+    // })
     // inject context for auth
     this.contextInjector = new ContextInjector(this.context)
     await this.contextInjector.injectContext(this.url)

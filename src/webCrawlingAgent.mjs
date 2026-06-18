@@ -5,6 +5,9 @@ import { Helpers } from './helpers.mjs'
 import { ContextInjector } from './contextInjector.mjs'
 import { XCrawler } from './crawler/XCrawler.mjs'
 import { SkySportsCrawler } from './crawler/SkySportsCrawler.mjs'
+import { MarcaCrawler } from './crawler/MarcaCrawler.mjs'
+import { BildRssCrawler } from './crawler/BildRssCrawler.mjs'
+import { MarcaRssCrawler } from './crawler/MarcaRssCrawler.mjs'
 
 export class WebCrawlingAgent { 
   constructor({
@@ -43,7 +46,7 @@ export class WebCrawlingAgent {
             url,
           })
           break
-      
+
         case 'skysports':
           crawler = new SkySportsCrawler({
             browser: this.browser,
@@ -51,7 +54,31 @@ export class WebCrawlingAgent {
             url,
           })
           break
-        
+
+        case 'marca':
+          crawler = new MarcaCrawler({
+            browser: this.browser,
+            goal: this.topic,
+            url,
+          })
+          break
+
+        case 'marcaRss':
+          crawler = new MarcaRssCrawler({
+            browser: this.browser,
+            goal: this.topic,
+            url,
+          })
+          break
+
+        case 'bildRss':
+          crawler = new BildRssCrawler({
+            browser: this.browser,
+            goal: this.topic,
+            url,
+          })
+          break
+
         default:
           throw new Error(`unsupported url type: ${type}`)
       }
@@ -73,6 +100,15 @@ export class WebCrawlingAgent {
     if (url.includes('skysports.com')) {
       return 'skysports'
     }
+    if (url.includes('marca.com/rss')) {
+      return 'marcaRss'
+    }
+    if (url.includes('marca.com')) {
+      return 'marca'
+    }
+    if (url.includes('sportbild.bild.de/feed')) {
+      return 'bildRss'
+    }
     return 'ai'
   }
 
@@ -81,24 +117,6 @@ export class WebCrawlingAgent {
       headless: false,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     })
-    // this.webCrawlingFunction = new WebCrawlingFunction(this.page)
-
-    // this.functions = {
-    //   getCurrentPageText: this.webCrawlingFunction.getCurrentPageText,
-    //   clickButton: this.webCrawlingFunction.clickButton,
-    //   scrollPageDown: (args) => this.webCrawlingFunction.scrollPageDown(args),
-    //   getTweets: (args) => this.webCrawlingFunction.getTweets(args),
-    // }
-    // this.tools = [
-    //   {
-    //     functionDeclarations: [
-    //       this.webCrawlingFunction.tweetsDeclaration,
-    //       this.webCrawlingFunction.scrollPageDownDeclaration,
-    //       this.webCrawlingFunction.currentPageTextDeclaration,
-    //       this.webCrawlingFunction.clickButtonDeclaration,
-    //     ],
-    //   },
-    // ]
   }
 
   async crawlAllUrls() { 
