@@ -1,4 +1,4 @@
-import { BaseCrawler } from './baseCrawler.mjs'
+import { BaseCrawler } from './BaseCrawler.mjs'
 
 // in days
 const crawlRecency = 1
