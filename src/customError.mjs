@@ -2,8 +2,17 @@ import { Telegram } from './telegram.mjs'
 
 export class CustomError extends Error {
   static createErrorTemplate(error) {
-    const status = error.status
-    const detailedErrorObj = JSON.parse(error.message).error
+    let detailedErrorObj
+    try {
+      detailedErrorObj = JSON.parse(error.message).error
+    } catch {
+      return this.template(
+        error.status || 'NIL',
+        error.message || String(error),
+        'Non-API error',
+      )
+    }
+
     console.error(detailedErrorObj)
 
     let output

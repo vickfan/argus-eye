@@ -11,6 +11,7 @@ import { MarcaRssCrawler } from './crawler/MarcaRssCrawler.mjs'
 import dotenv from 'dotenv'
 import { PerformanceLogger } from './util/PerformanceLogger.mjs'
 import moment from 'moment'
+import { StatusTracker } from './util/StatusTracker.mjs'
 
 dotenv.config()
 const NODE_ENV = process.env.NODE_ENV
@@ -38,11 +39,16 @@ export class WebCrawlingAgent {
     })
 
     const performanceLogger = new PerformanceLogger({
-      clientEmail: process.env.CLIENT_EMAIL,
-      privateKey: process.env.PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      spreadsheetId: process.env.SPREAD_SHEET_ID,
+      clientEmail: process.env.GOOGLE_CLIENT_EMAIL,
+      privateKey: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      spreadsheetId: process.env.GOOGLE_SPREAD_SHEET_ID,
     })
     await performanceLogger.init()
+
+    const statusTracker = new StatusTracker({
+      supabaseUrl: process.env.SUPABASE_URL,
+      supabaseKey: process.env.SUPABASE_PUBLISHABLE_KEY,
+    })
 
     await Promise.all(this.urls.map(async url => {
       if (!url) {
@@ -96,13 +102,18 @@ export class WebCrawlingAgent {
           throw new Error(`unsupported url type: ${type}`)
       }
 
-      if (crawler) {
+      let shouldCrawl = await statusTracker.shouldCrawl(type)
+
+      if (crawler && shouldCrawl) {
         try {
           const startTime = moment()
           const data = await crawler.crawl()
           const endTime = moment()
           const executionTime = endTime.diff(startTime, 'milliseconds')
           if (isPROD) {
+            const isSuccess = data.length > 0
+            await statusTracker.update(type, isSuccess)
+
             await performanceLogger.log({
               source: type,
               url,
@@ -115,6 +126,8 @@ export class WebCrawlingAgent {
           masterPayload = masterPayload.concat(data)
         } catch (error) {
           if (isPROD) {
+            await statusTracker.update(type, false)
+
             await performanceLogger.log({
               source: type,
               url,
