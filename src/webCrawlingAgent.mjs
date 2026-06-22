@@ -9,6 +9,9 @@ import { MarcaCrawler } from './crawler/MarcaCrawler.mjs'
 import { BildRssCrawler } from './crawler/BildRssCrawler.mjs'
 import { MarcaRssCrawler } from './crawler/MarcaRssCrawler.mjs'
 import dotenv from 'dotenv'
+import { PerformanceLogger } from './util/PerformanceLogger.mjs'
+import moment from 'moment'
+
 dotenv.config()
 const NODE_ENV = process.env.NODE_ENV
 const isPROD = NODE_ENV === 'PROD'
@@ -33,6 +36,13 @@ export class WebCrawlingAgent {
       headless: isPROD,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     })
+
+    const performanceLogger = new PerformanceLogger({
+      clientEmail: process.env.CLIENT_EMAIL,
+      privateKey: process.env.PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      spreadsheetId: process.env.SPREAD_SHEET_ID,
+    })
+    await performanceLogger.init()
 
     await Promise.all(this.urls.map(async url => {
       if (!url) {
@@ -87,8 +97,34 @@ export class WebCrawlingAgent {
       }
 
       if (crawler) {
-        const data = await crawler.crawl()
-        masterPayload = masterPayload.concat(data)
+        try {
+          const startTime = moment()
+          const data = await crawler.crawl()
+          const endTime = moment()
+          const executionTime = endTime.diff(startTime, 'milliseconds')
+          if (isPROD) {
+            await performanceLogger.log({
+              source: type,
+              url,
+              status: 'SUCCESS',
+              posts_scrapped: data.length,
+              execution_time: executionTime,
+              error: null,
+            })
+          }
+          masterPayload = masterPayload.concat(data)
+        } catch (error) {
+          if (isPROD) {
+            await performanceLogger.log({
+              source: type,
+              url,
+              status: 'ERROR',
+              post_scrapped: 0,
+              execution_time: 0,
+              error: error.message,
+            })
+          }
+        }
       }
     }))
 
