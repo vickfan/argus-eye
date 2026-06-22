@@ -10,6 +10,9 @@ on:
   repository_dispatch:
     types: [ios-trigger]
 
+permissions:
+  contents: write
+
 concurrency:
   group: argus-eye
   cancel-in-progress: true
@@ -49,3 +52,11 @@ jobs:
         RESEARCH_URLS: ${{ vars.RESEARCH_URLS }}
         NODE_ENV: ${{ vars.NODE_ENV }}
       run: node index.mjs
+
+    - name: Upload Debug Artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: crawler-step-outputs-${{ github.run_id }}
+        path: debug/
+        retention-days: 7

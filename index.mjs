@@ -4,6 +4,7 @@ import { WebCrawlingAgent } from './src/webCrawlingAgent.mjs'
 import { DigestingAgent } from './src/digestingAgent.mjs'
 import { CustomError } from './src/customError.mjs'
 import dotenv from 'dotenv'
+import { outputChecker } from './src/util/OutputChecker.mjs'
 
 dotenv.config()
 
@@ -52,6 +53,8 @@ async function main() {
       }
     })
 
+    outputChecker.checkAndSave('cleanedFeeds', cleanedFeeds)
+
     if (isUAT) {
       console.log(cleanedFeeds)
     }
@@ -67,6 +70,8 @@ async function main() {
       )
 
       const digestingResults = JSON.parse(rawDigestingResults)
+
+      outputChecker.checkAndSave('digestingResults', digestingResults)
 
       const finalTransfers = digestingResults.transfers.map((transfer) => {
         const relatedFeedIds = transfer.related_feed_ids || []
@@ -118,6 +123,9 @@ async function main() {
           media_urls: uniqueMediaUrls ?? [],
         }
       })
+
+      outputChecker.checkAndSave('finalTransfers', finalTransfers)
+      outputChecker.checkAndSave('finalMatches', finalMatches)
 
       await telegram.sendTransferReport(finalTransfers)
       await telegram.sendWorldCupReport(finalMatches)
