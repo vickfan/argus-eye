@@ -43,7 +43,6 @@ export class BildRssCrawler extends BaseCrawler {
       })
     }
     
-    console.log(results)
     return results
   }
 }

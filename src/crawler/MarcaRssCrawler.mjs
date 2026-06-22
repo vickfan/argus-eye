@@ -21,7 +21,6 @@ export class MarcaRssCrawler extends BaseCrawler {
     const crawlLimitDate = now.clone().subtract(crawlRecency, 'day')
 
     for (const feed of feeds.items) {
-      console.log({ feed })
       const feedDate = moment(feed.pubDate, 'ddd, DD MMM YYYY HH:mm:ss [CEST]')
 
       if (feedDate.isBefore(crawlLimitDate)) {
@@ -44,7 +43,6 @@ export class MarcaRssCrawler extends BaseCrawler {
       })
     }
     
-    console.log(results)
     return results
   }
 }

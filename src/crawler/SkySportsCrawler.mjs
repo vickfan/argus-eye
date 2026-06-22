@@ -38,7 +38,6 @@ export class SkySportsCrawler extends BaseCrawler {
 
   async acceptCookies() {
     try {
-      console.log('⏳ 正在等待 Cookie 隱私彈窗 (iframe) 渲染...')
 
       // 1. 認準 Sourcepoint 的 iframe 網址通常包含 "notice" 或特定屬性
       // 這裡用 frameLocator 鎖定這個隱私彈窗的 iframe
@@ -53,20 +52,14 @@ export class SkySportsCrawler extends BaseCrawler {
       await acceptButton.waitFor({ state: 'visible', timeout: 5000 })
       await acceptButton.click()
 
-      console.log(
-        '🍪 【Argus 突破成功】順利穿透 iframe 點擊 Accept all！解鎖網頁滾動！',
-      )
-
       // 4. 點完等 1.5 秒，給網頁一點時間把遮罩淡出（Fade-out）並恢復 body 滾動
       await this.page.waitForTimeout(1500)
     } catch (error) {
       // 如果 5 秒內沒彈出來（例如 GitHub Actions 機房 IP 有時不會觸發隱私政策），就直接 Skip 不卡死
-      console.log('ℹ️ 未能偵測到 Cookie 彈窗或已自動跳過，直接開始爬取。')
     }
   }
 
   async getFeeds() {
-    console.log('getFeeds')
     return await this.page.evaluate((recency) => {
       const feeds = document.querySelectorAll(
         '#liveblog-posts div.ncpost-list-post',
@@ -132,7 +125,6 @@ export class SkySportsCrawler extends BaseCrawler {
   }
 
   async clickLoadMore() {
-    console.log('clickLoadMore')
     try {
       await this.page.evaluate(() => {
         const loadMoreButton = document.querySelector(
