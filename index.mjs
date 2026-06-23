@@ -46,8 +46,9 @@ async function main() {
       feedMap.set(feedId, feed)
 
       return {
-        feed_id: feedId, // 給它一個臨時 ID，方便未來比對
-        time: feed.time, // 傳入你 parseInt 成功後的 timestamp
+        id: index,
+        // feed_id: feedId, // 給它一個臨時 ID，方便未來比對
+        // time: feed.time, // 傳入你 parseInt 成功後的 timestamp
         title: feed.title, // 新聞標題
         desc: feed.desc, // 新聞內容描述
       }
@@ -61,8 +62,6 @@ async function main() {
 
     if (isPROD) {
       const digestingAgent = new DigestingAgent({
-        ai,
-        topic: resultTopic,
         geminiApiKey,
       })
       const rawDigestingResults = await digestingAgent.digest(
@@ -74,7 +73,7 @@ async function main() {
       outputChecker.checkAndSave('digestingResults', digestingResults)
 
       const finalTransfers = digestingResults.transfers.map((transfer) => {
-        const relatedFeedIds = transfer.related_feed_ids || []
+        const relatedFeedIds = transfer.related_ids || []
         let source_urls = []
         let media_urls = []
 
@@ -101,7 +100,7 @@ async function main() {
       })
 
       const finalMatches = digestingResults.world_cup_matches.map((match) => {
-        const relatedFeedIds = match.related_feed_ids || []
+        const relatedFeedIds = match.related_ids || []
         let source_urls = []
         let media_urls = []
         relatedFeedIds.forEach((feedId) => {
@@ -116,7 +115,7 @@ async function main() {
         const uniqueMediaUrls = Array.from(new Set(media_urls))
 
         return {
-          teams_involved: match.teams_involved,
+          teams_involved: match.match_name,
           points: match.points,
           bullet_points: match.bullet_points,
           source_urls: uniqueSourceUrls ?? [],
