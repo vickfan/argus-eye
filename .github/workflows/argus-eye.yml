@@ -40,6 +40,16 @@ jobs:
         PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
       run: npm ci
 
+    - name: Restore Previous Pages
+      run: |
+        git fetch origin gh-pages || true
+        if git ls-tree -r --name-only origin/gh-pages >/dev/null 2>&1; then
+          git ls-tree -r --name-only origin/gh-pages | while read -r f; do
+            mkdir -p "publish/$(dirname "$f")"
+            git show "origin/gh-pages:$f" > "publish/$f" || true
+          done
+        fi
+
     - name: Run Argus Eye
       env:
         # secrets
@@ -57,6 +67,17 @@ jobs:
         RESEARCH_URLS: ${{ vars.RESEARCH_URLS }}
         NODE_ENV: ${{ vars.NODE_ENV }}
       run: node index.mjs
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: publish
+        publish_branch: gh-pages
+        keep_history: true
+        force_orphan: false
+        enable_jekyll: true
+        allow_empty_commit: false
 
     - name: Upload Debug Artifacts
       if: always()

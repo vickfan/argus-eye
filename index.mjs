@@ -4,7 +4,10 @@ import { WebCrawlingAgent } from './src/webCrawlingAgent.mjs'
 import { DigestingAgent } from './src/digestingAgent.mjs'
 import { CustomError } from './src/customError.mjs'
 import dotenv from 'dotenv'
+import fs from 'fs'
+import moment from 'moment'
 import { outputChecker } from './src/util/OutputChecker.mjs'
+import { renderTransferPage } from './src/pageRenderer.mjs'
 
 dotenv.config()
 
@@ -100,35 +103,25 @@ async function main() {
         }
       })
 
-      const finalMatches = digestingResults.world_cup_matches.map((match) => {
-        const relatedFeedIds = match.related_feed_ids || []
-        let source_urls = []
-        let media_urls = []
-        relatedFeedIds.forEach((feedId) => {
-          const feed = feedMap.get(feedId)
-          if (feed) {
-            source_urls.push(feed.source_url)
-            media_urls.push(...feed.media_urls)
-          }
-        })
-
-        const uniqueSourceUrls = Array.from(new Set(source_urls))
-        const uniqueMediaUrls = Array.from(new Set(media_urls))
-
-        return {
-          teams_involved: match.teams_involved,
-          points: match.points,
-          bullet_points: match.bullet_points,
-          source_urls: uniqueSourceUrls ?? [],
-          media_urls: uniqueMediaUrls ?? [],
-        }
-      })
-
       outputChecker.checkAndSave('finalTransfers', finalTransfers)
-      outputChecker.checkAndSave('finalMatches', finalMatches)
 
-      await telegram.sendTransferReport(finalTransfers)
-      await telegram.sendWorldCupReport(finalMatches)
+      const pagesUrl = process.env.GITHUB_REPOSITORY
+        ? `https://${process.env.GITHUB_REPOSITORY.split('/')[0]}.github.io/${process.env.GITHUB_REPOSITORY.split('/')[1]}/latest.html`
+        : 'https://vickfan.github.io/argus-eye/latest.html'
+
+      fs.mkdirSync('publish', { recursive: true })
+
+      if (finalTransfers.length === 0) {
+        await telegram.sendEmptyDayMessage()
+      } else {
+        const html = renderTransferPage(finalTransfers)
+        const date = moment().format('YYYY-MM-DD')
+
+        fs.writeFileSync('publish/latest.html', html)
+        fs.writeFileSync(`publish/${date}.html`, html)
+
+        await telegram.sendTransferReport(pagesUrl)
+      }
     }
   } catch (error) {
     message = CustomError.createErrorTemplate(error)

@@ -61,32 +61,8 @@ export class DigestingAgent {
             ],
           },
         },
-        world_cup_matches: {
-          type: Type.ARRAY,
-          items: {
-            type: Type.OBJECT,
-            properties: {
-              // 🔒 核心錨點：一場波通常會聚合多條 feeds 嘅 ID
-              related_feed_ids: {
-                type: Type.ARRAY,
-                items: { type: Type.STRING },
-                description:
-                  "所有與這場賽事相關的 feed_id 陣列（例如 ['feed_2', 'feed_5']）",
-              },
-              teams_involved: { type: Type.STRING },
-              points: { type: Type.STRING },
-              bullet_points: { type: Type.ARRAY, items: { type: Type.STRING } },
-            },
-            required: [
-              'related_feed_ids',
-              'teams_involved',
-              'points',
-              'bullet_points',
-            ],
-          },
-        },
       },
-      required: ['report_date', 'transfers', 'world_cup_matches'],
+      required: ['report_date', 'transfers'],
     }
   }
 }
