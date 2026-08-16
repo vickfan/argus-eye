@@ -37,6 +37,18 @@ const digestingPrompt = `
 核心任務：
 1. 請對數據進行去粗取精的提煉。所有「球員姓名 (player_name)」及「涉及球會 (clubs_involved)」必須保留原始英文原文（例如 player_name 寫 "Kylian Mbappé"、clubs_involved 寫 "Real Madrid / Al-Hilal"），切勿翻譯或粵語音譯成中文。中文只用在 headline_hk 與 bullet_points。（例如：Mbappé 唔好譯做 麥巴比、Chelsea 唔好譯做 車路士、Manchester United 唔好譯做 曼聯）。
 2. 你必須嚴格歸納所有「轉會消息 (transfers)」。
+3. 每一條轉會消息需要行以下三個維度嘅分類，每個維度都要揀一個（全部用英文，不可自創、不可混合）：
+   - "status" ← 轉會進度維度，三選一：
+     - Rumor（純傳聞 / 可能離隊 / 動向未明 / 有意收購）
+     - Negotiation（談判中 / 接近完成）
+     - Confirmed（已完成 / 官宣）
+   - "transfer_type" ← 交易類別維度，二選一：
+     - Loan（借用）
+     - Permanent（永久性轉會）
+   - "deals_off" ← 告吹旗標，只可以係 true 或 false：
+     - true（交易已告吹 / 報價被拒 / 談判失敗）
+     - false（一切正常 / 仲未告吹）
+   翻譯規則：status 及 transfer_type 永遠用英文，不要翻譯成中文。
 
 🚨 ID 錨定與精準追蹤原則（核心命令）：
 - 在提煉每一條新聞時，你必須找出這條情報是源自輸入數據中的哪一個或哪幾個 "feed_id"。

@@ -15,6 +15,8 @@ export function renderTransferPage(transfers) {
   const articles = list.map((t, i) => ({
     id: `item-${i}`,
     status: t.status ?? '',
+    transfer_type: t.transfer_type ?? '',
+    deals_off: !!t.deals_off,
     player_name: t.player_name ?? '',
     clubs_involved: t.clubs_involved ?? '',
     headline_hk: t.headline_hk ?? '',
@@ -242,10 +244,25 @@ a { color: inherit; text-decoration: none }
 
 .filters {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 12px;
+}
+
+.filter-row {
+  display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: baseline;
   gap: 8px;
-  padding-bottom: 12px;
+}
+
+.filter-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
 }
 
 .filter-btn {
@@ -577,6 +594,7 @@ a { color: inherit; text-decoration: none }
     <div class="story-main">
       <div class="pills">
         <span class="kicker" id="a-status"></span>
+        <span class="kicker" id="a-type" hidden></span>
         <span class="kicker accent" id="a-player"></span>
       </div>
       <h2 class="story-headline" id="a-headline"></h2>
@@ -599,6 +617,7 @@ const articles = ${dataJson}
   const leadBox = document.getElementById('lead')
   const grid = document.getElementById('grid')
   const filterBox = document.getElementById('filters')
+  const rowBox = filterBox
   const searchInput = document.getElementById('search')
   const home = document.getElementById('home')
   const listView = document.getElementById('list')
@@ -611,7 +630,14 @@ const articles = ${dataJson}
 
   const GAP = 20
   const IMG_BREAKPOINT = 1.4
-  let activeStatus = 'ALL'
+
+  const filters = { status: 'ALL', type: 'ALL', off: 'ALL' }
+
+  const DIM_ROWS = [
+    { key: 'status', label: '進度', options: ['Rumor', 'Negotiation', 'Confirmed'] },
+    { key: 'type', label: '類別', options: ['Loan', 'Permanent'] },
+    { key: 'off', label: '狀態', options: ['Deals off'] },
+  ]
 
   const palette = [
     '#b58900',
@@ -646,7 +672,7 @@ const articles = ${dataJson}
   }
 
   function searchText(a) {
-    return (a.player_name || '') + ' ' + (a.clubs_involved || '') + ' ' + (a.headline_hk || '') + ' ' + (a.status || '')
+    return (a.player_name || '') + ' ' + (a.clubs_involved || '') + ' ' + (a.headline_hk || '') + ' ' + (a.status || '') + ' ' + (a.transfer_type || '')
   }
 
   function columnCount() {
@@ -707,6 +733,14 @@ const articles = ${dataJson}
     return '<img src="' + esc(url) + '" alt="" loading="lazy">'
   }
 
+  function cardMeta(a) {
+    const bits = []
+    if (a.deals_off) bits.push('告吹')
+    bits.push(a.clubs_involved || '')
+    bits.push(a.transfer_type || '')
+    return bits.filter(Boolean).join(' · ')
+  }
+
   function cardMarkup(a) {
     const pic = a.media_urls[0] ? picMarkup(a.media_urls[0]) : ''
     return (
@@ -715,7 +749,7 @@ const articles = ${dataJson}
       '<p class="kicker">' + esc(a.status) + '</p>' +
       '<h3 class="card-title">' + esc(a.headline_hk) + '</h3>' +
       '<p class="lede">' + esc(a.lead || '') + '</p>' +
-      '<p class="card-meta">' + esc(a.player_name) + ' · ' + esc(a.clubs_involved) + '</p>' +
+      '<p class="card-meta">' + esc(cardMeta(a)) + '</p>' +
       markupClose()
     )
   }
@@ -742,34 +776,61 @@ const articles = ${dataJson}
   }
 
   function buildFilters() {
-    const statuses = []
-    articles.forEach(function (a) {
-      if (statuses.indexOf(a.status) === -1) statuses.push(a.status)
+    DIM_ROWS.forEach(function (row) {
+      const label = document.createElement('span')
+      label.className = 'filter-label'
+      label.textContent = row.label
+      rowBox.appendChild(label)
+      rowBox.appendChild(createRow(row))
     })
+  }
 
-    const addBtn = function (label, status) {
-      const btn = document.createElement('button')
-      btn.type = 'button'
-      btn.className = 'filter-btn'
-      btn.dataset.filterStatus = status
-      btn.textContent = label
-      if (status !== 'ALL') btn.style.setProperty('--fc', colorForStatus(status))
-      btn.addEventListener('click', function () {
-        activeStatus = status
-        filterBox.querySelectorAll('.filter-btn').forEach(function (b) {
-          b.classList.toggle('active', b === btn)
-        })
-        if (status === 'ALL') searchInput.value = ''
-        apply()
-      })
-      filterBox.appendChild(btn)
-      return btn
-    }
+  function createRow(row) {
+    const box = document.createElement('span')
+    box.className = 'filter-row'
+    box.dataset.dim = row.key
 
-    const allBtn = addBtn('全部', 'ALL')
-    allBtn.style.setProperty('--fc', 'var(--ink-soft)')
+    const allBtn = makeBtn('全部', 'ALL')
     allBtn.classList.add('active')
-    statuses.forEach(function (s) { addBtn(s, s) })
+    allBtn.style.setProperty('--fc', 'var(--ink-soft)')
+    box.appendChild(allBtn)
+
+    row.options.forEach(function (opt) {
+      const btn = makeBtn(opt, opt)
+      btn.style.setProperty('--fc', colorForStatus(opt))
+      box.appendChild(btn)
+    })
+    return box
+  }
+
+  function makeBtn(labelText, value) {
+    const btn = document.createElement('button')
+    btn.type = 'button'
+    btn.className = 'filter-btn'
+    btn.textContent = labelText
+    btn.dataset.id = value
+    btn.addEventListener('click', function () {
+      setActiveRow(rowFor(btn), value)
+      if (value === 'ALL') searchInput.value = ''
+      apply()
+    })
+    return btn
+  }
+
+  function rowFor(btn) {
+    return btn.closest('.filter-row')
+  }
+
+  function setActiveRow(row, value) {
+    const key = row.dataset.dim
+    filters[key] = value
+    row.querySelectorAll('.filter-btn').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.id === value)
+    })
+  }
+
+  function anyFilterActive() {
+    return filters.status !== 'ALL' || filters.type !== 'ALL' || filters.off !== 'ALL'
   }
 
   function query() {
@@ -778,11 +839,12 @@ const articles = ${dataJson}
 
   function matches(a) {
     const q = query()
-    const okStatus =
-      activeStatus === 'ALL' || a.status === activeStatus
-    const okSearch =
-      !q || searchText(a).toLowerCase().indexOf(q) !== -1
-    return okStatus && okSearch
+    const okStatus = filters.status === 'ALL' || a.status === filters.status
+    const okType = filters.type === 'ALL' || a.transfer_type === filters.type
+    const okOff =
+      filters.off === 'ALL' || (filters.off === 'Deals off' ? !!a.deals_off : !a.deals_off)
+    const okSearch = !q || searchText(a).toLowerCase().indexOf(q) !== -1
+    return okStatus && okType && okOff && okSearch
   }
 
   function renderList() {
@@ -809,7 +871,7 @@ const articles = ${dataJson}
   }
 
   function apply() {
-    if (activeStatus !== 'ALL' || query()) {
+    if (anyFilterActive() || query()) {
       renderList()
       showView('list')
     } else {
@@ -843,10 +905,18 @@ const articles = ${dataJson}
     const story = document.querySelector('.story')
     story.style.setProperty('--fc', colorForStatus(a.status))
     const statusPill = document.getElementById('a-status')
+    const typePill = document.getElementById('a-type')
     const playerPill = document.getElementById('a-player')
     statusPill.textContent = a.status
+    if (a.transfer_type) {
+      typePill.textContent = a.transfer_type
+      typePill.hidden = false
+    } else {
+      typePill.hidden = true
+    }
     playerPill.textContent = a.player_name
     statusPill.onclick = function () { return filterByStatus(a.status) }
+    typePill.onclick = function () { return filterByType(a.transfer_type) }
     playerPill.onclick = function () { return filterByPlayer(a.player_name) }
     document.getElementById('a-headline').textContent = a.headline_hk
     document.getElementById('a-lead').textContent = a.lead || ''
@@ -877,21 +947,29 @@ const articles = ${dataJson}
   }
 
   function filterByStatus(status) {
-    activeStatus = status
+    const row = rowBox.querySelector('[data-dim="status"]')
+    setActiveRow(row, status)
     searchInput.value = ''
-    filterBox.querySelectorAll('.filter-btn').forEach(function (b) {
-      b.classList.toggle('active', b.dataset.filterStatus === status || b.textContent === status)
-    })
+    location.hash = 'home'
+    apply()
+  }
+
+  function filterByType(type) {
+    const row = rowBox.querySelector('[data-dim="type"]')
+    setActiveRow(row, type)
+    searchInput.value = ''
     location.hash = 'home'
     apply()
   }
 
   function filterByPlayer(player) {
-    activeStatus = 'ALL'
+    filters.status = 'ALL'
+    filters.type = 'ALL'
+    filters.off = 'ALL'
+    setActiveRow(rowBox.querySelector('[data-dim="status"]'), 'ALL')
+    setActiveRow(rowBox.querySelector('[data-dim="type"]'), 'ALL')
+    setActiveRow(rowBox.querySelector('[data-dim="off"]'), 'ALL')
     searchInput.value = player
-    filterBox.querySelectorAll('.filter-btn').forEach(function (b) {
-      b.classList.toggle('active', b.dataset.filterStatus === 'ALL')
-    })
     location.hash = 'home'
     apply()
   }

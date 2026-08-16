@@ -96,6 +96,8 @@ async function main() {
           player_name: transfer.player_name,
           clubs_involved: transfer.clubs_involved,
           status: transfer.status,
+          transfer_type: transfer.transfer_type,
+          deals_off: !!transfer.deals_off,
           headline_hk: transfer.headline_hk,
           bullet_points: transfer.bullet_points,
           source_url: uniqueSourceUrls ?? [],

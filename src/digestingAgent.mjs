@@ -46,7 +46,20 @@ export class DigestingAgent {
               },
               player_name: { type: Type.STRING },
               clubs_involved: { type: Type.STRING },
-              status: { type: Type.STRING },
+              status: {
+                type: Type.STRING,
+                enum: ['Rumor', 'Negotiation', 'Confirmed'],
+                description: '轉會進度維度，每條只可選一個，必為以下固定分類之一: Rumor / Negotiation / Confirmed',
+              },
+              transfer_type: {
+                type: Type.STRING,
+                enum: ['Loan', 'Permanent'],
+                description: '交易類別維度，每條只可選一個，必為以下固定分類之一: Loan / Permanent',
+              },
+              deals_off: {
+                type: Type.BOOLEAN,
+                description: '是否告吹（Deals off）。若交易已告吹或被拒，設為 true；否則 false。',
+              },
               headline_hk: { type: Type.STRING },
               bullet_points: { type: Type.ARRAY, items: { type: Type.STRING } },
               // 💡 這裡不需要叫 Gemini 回傳 source_url 欄位了，我們在外層自己接
@@ -56,6 +69,8 @@ export class DigestingAgent {
               'player_name',
               'clubs_involved',
               'status',
+              'transfer_type',
+              'deals_off',
               'headline_hk',
               'bullet_points',
             ],

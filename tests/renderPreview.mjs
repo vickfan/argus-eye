@@ -7,7 +7,9 @@ const sample = [
   {
     player_name: '賴恩·羅拔圖 (Ryan Roberto)',
     clubs_involved: '費林明高 ➡️ 薩克達',
-    status: '官方宣佈',
+    status: 'Confirmed',
+    transfer_type: 'Permanent',
+    deals_off: false,
     headline_hk: '薩克達正式官宣，900 萬歐元簽下費林明高 18 歲新翼',
     bullet_points: [
       '雙方簽約至 2031 年，轉會費 900 萬歐元',
@@ -22,7 +24,9 @@ const sample = [
   {
     player_name: '耶耶·托尼 (Yaya Touré)',
     clubs_involved: '自由身 ➡️ 施洛雲',
-    status: '官方宣佈',
+    status: 'Confirmed',
+    transfer_type: 'Loan',
+    deals_off: false,
     headline_hk: '前曼城名將耶耶·托尼正式展開教練生涯，掛帥施洛雲',
     bullet_points: [
       '簽約加盟斯洛伐克球會施洛雲 (Slovan Bratislava)',
@@ -34,7 +38,9 @@ const sample = [
   {
     player_name: '雲尼斯奧斯 (Vinicius Jr)',
     clubs_involved: '皇家馬德里',
-    status: 'Here we go',
+    status: 'Confirmed',
+    transfer_type: 'Permanent',
+    deals_off: false,
     headline_hk: 'Here we go！雲尼斯奧斯傾掂續約新約，五年合約等官宣',
     bullet_points: [
       '轉會窗王牌記者確認雙方已達成協議',
@@ -51,7 +57,9 @@ const sample = [
   {
     player_name: '雲赫基 (Jan Paul van Hecke)',
     clubs_involved: '熱刺 / 白禮頓',
-    status: '談判中',
+    status: 'Negotiation',
+    transfer_type: 'Permanent',
+    deals_off: false,
     headline_hk: '熱刺斟緊白禮頓中堅雲赫基，個人條款一早傾掂',
     bullet_points: [
       '兩間球會正就轉會費展開談判',
@@ -63,7 +71,9 @@ const sample = [
   {
     player_name: '基利安·麥巴比 (Kylian Mbappé)',
     clubs_involved: '皇家馬德里',
-    status: '傳聞中',
+    status: 'Rumor',
+    transfer_type: 'Permanent',
+    deals_off: false,
     headline_hk: '傳聞中狀態：麥巴比被睇中撬去沙特聯賽，開天文價',
     bullet_points: [
       '沙特土豪球會願意提供天價年薪',
@@ -75,7 +85,9 @@ const sample = [
   {
     player_name: '泰拔·高圖爾斯 (Thibaut Courtois)',
     clubs_involved: '皇家馬德里',
-    status: '傳聞中',
+    status: 'Rumor',
+    transfer_type: 'Loan',
+    deals_off: true,
     headline_hk: '高圖爾斯親口講過 30 歲後一年一簽，續約傳聞滿天飛',
     bullet_points: [
       '門將話自己對續約好放鬆，相信保持狀態就冇問題',

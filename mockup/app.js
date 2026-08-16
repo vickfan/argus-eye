@@ -14,7 +14,14 @@
 
   const GAP = 20
   const IMG_BREAKPOINT = 1.4
-  let activeStatus = 'ALL'
+
+  const filters = { status: 'ALL', type: 'ALL', off: 'ALL' }
+
+  const DIM_ROWS = [
+    { key: 'status', label: '進度', options: ['Rumor', 'Negotiation', 'Confirmed'] },
+    { key: 'type', label: '類別', options: ['Loan', 'Permanent'] },
+    { key: 'off', label: '狀態', options: ['Deals off'] },
+  ]
 
   const palette = [
     '#b58900',
@@ -49,7 +56,7 @@
   }
 
   function searchText(a) {
-    return `${a.player_name || ''} ${a.clubs_involved || ''} ${a.headline_hk || ''} ${a.status || ''}`
+    return `${a.player_name || ''} ${a.clubs_involved || ''} ${a.headline_hk || ''} ${a.status || ''} ${a.transfer_type || ''}`
   }
 
   function columnCount() {
@@ -100,24 +107,32 @@
     else img.addEventListener('load', reload)
   }
 
+  function cardMeta(a) {
+    const bits = []
+    if (a.deals_off) bits.push('告吹')
+    bits.push(a.clubs_involved || '')
+    bits.push(a.transfer_type || '')
+    return bits.filter(Boolean).join(' · ')
+  }
+
   function cardMarkup(a) {
     const pic = a.media_urls[0]
       ? `<img src="${esc(a.media_urls[0])}" alt="" loading="lazy">`
       : ''
-    return `<a class="card item" style="--fc:${colorForStatus(a.status)}" href="#${esc(a.id)}" data-id="${esc(a.id)}" data-status="${esc(a.status)}" data-search="${esc(searchText(a))}">
+    return `<a class="card item" style="--fc:${colorForStatus(a.status)}" href="#${esc(a.id)}" data-id="${esc(a.id)}" data-search="${esc(searchText(a))}">
       ${pic}
       <p class="kicker">${esc(a.status)}</p>
       <h3 class="card-title">${esc(a.headline_hk)}</h3>
       <p class="lede">${esc(a.lead || '')}</p>
-      <p class="card-meta">${esc(a.player_name)} · ${esc(a.clubs_involved)}</p>
+      <p class="card-meta">${esc(cardMeta(a))}</p>
     </a>`
   }
 
   function renderGrid() {
-    const [lead, ...rest] = articles
+    const lead = articles[0]
     if (!lead) return
 
-    leadBox.innerHTML = `<a class="card-lead item" style="--fc:${colorForStatus(lead.status)}" href="#${esc(lead.id)}" data-id="${esc(lead.id)}" data-status="${esc(lead.status)}" data-search="${esc(searchText(lead))}">
+    leadBox.innerHTML = `<a class="card-lead item" style="--fc:${colorForStatus(lead.status)}" href="#${esc(lead.id)}" data-id="${esc(lead.id)}" data-search="${esc(searchText(lead))}">
       ${lead.media_urls[0] ? `<img src="${esc(lead.media_urls[0])}" alt="" loading="lazy">` : ''}
       <div class="lead-body">
         <p class="kicker">${esc(lead.status)}</p>
@@ -126,54 +141,66 @@
       </div>
     </a>`
 
-    grid.innerHTML = rest.map(cardMarkup).join('')
+    grid.innerHTML = articles.slice(1).map(cardMarkup).join('')
 
     grid.querySelectorAll('.card').forEach(fitCard)
     layout()
   }
 
   function buildFilters() {
-    const statuses = []
-    articles.forEach((a) => {
-      if (statuses.indexOf(a.status) === -1) statuses.push(a.status)
-    })
+    DIM_ROWS.forEach((row) => {
+      const rowEl = document.createElement('div')
+      rowEl.className = 'filter-row'
 
-    const addBtn = (label, status) => {
+      const label = document.createElement('span')
+      label.className = 'filter-label'
+      label.textContent = row.label
+      rowEl.appendChild(label)
+
+      const allBtn = makeBtn('全部', row.key, 'ALL')
+      allBtn.classList.add('active')
+      rowEl.appendChild(allBtn)
+
+      row.options.forEach((opt) => rowEl.appendChild(makeBtn(opt, row.key, opt)))
+
+      filterBox.appendChild(rowEl)
+    })
+  }
+
+  function makeBtn(label, key, value) {
     const btn = document.createElement('button')
     btn.type = 'button'
     btn.className = 'filter-btn'
-    btn.dataset.filterStatus = status
+    btn.dataset.dim = key
+    btn.dataset.value = value
     btn.textContent = label
-    if (status !== 'ALL') btn.style.setProperty('--fc', colorForStatus(status))
+    if (value !== 'ALL') btn.style.setProperty('--fc', colorForStatus(value))
     btn.addEventListener('click', () => {
-      activeStatus = status
-      filterBox.querySelectorAll('.filter-btn').forEach((b) => {
+      filters[key] = value
+      filterBox.querySelectorAll(`[data-dim="${key}"]`).forEach((b) => {
         b.classList.toggle('active', b === btn)
       })
-      if (status === 'ALL') searchInput.value = ''
+      if (key === 'status' && value === 'ALL') searchInput.value = ''
       apply()
     })
-    filterBox.appendChild(btn)
     return btn
-  }
-
-    const allBtn = addBtn('全部', 'ALL')
-    allBtn.style.setProperty('--fc', 'var(--ink-soft)')
-    allBtn.classList.add('active')
-    statuses.forEach((s) => addBtn(s, s))
   }
 
   function query() {
     return (searchInput.value || '').trim().toLowerCase()
   }
 
+  function anyFilterActive() {
+    return filters.status !== 'ALL' || filters.type !== 'ALL' || filters.off !== 'ALL'
+  }
+
   function matches(a) {
     const q = query()
-    const okStatus =
-      activeStatus === 'ALL' || a.status === activeStatus
-    const okSearch =
-      !q || searchText(a).toLowerCase().indexOf(q) !== -1
-    return okStatus && okSearch
+    const okSearch = !q || searchText(a).toLowerCase().indexOf(q) !== -1
+    const okStatus = filters.status === 'ALL' || a.status === filters.status
+    const okType = filters.type === 'ALL' || a.transfer_type === filters.type
+    const okOff = filters.off === 'ALL' || (filters.off === 'Deals off' && !!a.deals_off)
+    return okSearch && okStatus && okType && okOff
   }
 
   function renderList() {
@@ -198,7 +225,7 @@
   }
 
   function apply() {
-    if (activeStatus !== 'ALL' || query()) {
+    if (anyFilterActive() || query()) {
       renderList()
       showView('list')
     } else {
@@ -232,10 +259,14 @@
     const story = document.querySelector('.story')
     story.style.setProperty('--fc', colorForStatus(a.status))
     const statusPill = document.getElementById('a-status')
+    const typePill = document.getElementById('a-type')
     const playerPill = document.getElementById('a-player')
     statusPill.textContent = a.status
+    typePill.textContent = a.transfer_type || ''
+    typePill.hidden = !a.transfer_type
     playerPill.textContent = a.player_name
     statusPill.onclick = () => filterByStatus(a.status)
+    typePill.onclick = () => filterByType(a.transfer_type)
     playerPill.onclick = () => filterByPlayer(a.player_name)
     document.getElementById('a-headline').textContent = a.headline_hk
     document.getElementById('a-lead').textContent = a.lead || ''
@@ -264,22 +295,36 @@
     showView('article')
   }
 
-  function filterByStatus(status) {
-    activeStatus = status
-    searchInput.value = ''
-    filterBox.querySelectorAll('.filter-btn').forEach((b) => {
-      b.classList.toggle('active', b.dataset.filterStatus === status || b.textContent === status)
+  function setActiveRow(key, value) {
+    filterBox.querySelectorAll(`[data-dim="${key}"]`).forEach((b) => {
+      b.classList.toggle('active', b.dataset.value === value)
     })
+  }
+
+  function filterByStatus(status) {
+    filters.status = status
+    setActiveRow('status', status)
+    searchInput.value = ''
+    location.hash = 'home'
+    apply()
+  }
+
+  function filterByType(type) {
+    filters.type = type
+    setActiveRow('type', type)
+    searchInput.value = ''
     location.hash = 'home'
     apply()
   }
 
   function filterByPlayer(player) {
-    activeStatus = 'ALL'
+    filters.status = 'ALL'
+    filters.type = 'ALL'
+    filters.off = 'ALL'
+    setActiveRow('status', 'ALL')
+    setActiveRow('type', 'ALL')
+    setActiveRow('off', 'ALL')
     searchInput.value = player
-    filterBox.querySelectorAll('.filter-btn').forEach((b) => {
-      b.classList.toggle('active', b.dataset.filterStatus === 'ALL')
-    })
     location.hash = 'home'
     apply()
   }
