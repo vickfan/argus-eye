@@ -2,13 +2,13 @@ const articles = [
   {
     id: 'rodri',
     status: '談判中',
-    player_name: '洛迪高',
-    clubs_involved: '曼城 / 巴塞隆拿',
-    headline_hk: '巴塞隆拿為洛迪高第三度開價，轉會接近落實',
+    player_name: 'Rodri',
+    clubs_involved: 'Manchester City / Barcelona',
+    headline_hk: '巴塞隆拿為羅德里第三度開價，轉會接近落實',
     lead: '巴塞隆拿已向曼城提交第三份報價，總價接近7000萬歐元，正努力促成這宗交易。',
     bullet_points: [
       '巴塞隆拿已向曼城提交第三份報價，總價接近7000萬歐元，正努力促成這宗交易。',
-      '儘管洛迪高身價高於預期，但巴塞隆拿仍有信心完成轉會，目前談判已進入最後關鍵階段。',
+      '儘管羅德里身價高於預期，但巴塞隆拿仍有信心完成轉會，目前談判已進入最後關鍵階段。',
     ],
     source_url: [
       'https://sportbild.bild.de/fussball/internationaler-fussball/fc-barcelona-verlockendes-angebot-fuer-rodri-weltmeister-teurer-als-gedacht-6a804730169e8e32c0ae91ee',
@@ -24,12 +24,12 @@ const articles = [
   {
     id: 'mikautadze',
     status: '已完成',
-    player_name: '米卡高斯',
-    clubs_involved: '阿積士 / 巴黎聖日耳門',
-    headline_hk: '巴黎聖日耳門正式簽入米卡高斯',
-    lead: '巴黎聖日耳門已從阿積士簽下米卡高斯，轉會費為4500萬歐元，另加1000萬歐元浮動條款。',
+    player_name: 'Georges Mikautadze',
+    clubs_involved: 'Ajax / Paris Saint-Germain',
+    headline_hk: '巴黎聖日耳門正式簽入米卡帕辛達斯',
+    lead: '巴黎聖日耳門已從阿積士簽下 Mikautadze，轉會費為4500萬歐元，另加1000萬歐元浮動條款。',
     bullet_points: [
-      '巴黎聖日耳門已從阿積士簽下米卡高斯，轉會費為4500萬歐元，另加1000萬歐元浮動條款，總值5500萬歐元。',
+      '巴黎聖日耳門已從阿積士簽下 Mikautadze，轉會費為4500萬歐元，另加1000萬歐元浮動條款，總值5500萬歐元。',
       '球員已完成體測並簽署合約，巴黎聖日耳門官方已確認這宗交易。',
     ],
     source_url: [
@@ -45,12 +45,12 @@ const articles = [
   {
     id: 'anger-nyango',
     status: '已完成',
-    player_name: '阿尼安格斯',
-    clubs_involved: '些路迪 / 韋斯咸',
-    headline_hk: '韋斯咸以破紀錄轉會費簽入阿尼安格斯',
-    lead: '韋斯咸已從些路迪簽入中場阿尼安格斯，轉會費為2200萬鎊，簽下一份為期五年的合約。',
+    player_name: 'Anger Nyango',
+    clubs_involved: 'Celtic / West Ham United',
+    headline_hk: '韋斯咸以破紀錄轉會費簽入 Nyango',
+    lead: '韋斯咸已從些路迪簽入中場 Anger Nyango，轉會費為2200萬鎊，簽下一份為期五年的合約。',
     bullet_points: [
-      '韋斯咸已從些路迪簽入中場阿尼安格斯，轉會費為2200萬鎊，並簽下一份為期五年的合約，打破了英冠聯賽的轉會費紀錄。',
+      '韋斯咸已從些路迪簽入中場 Anger Nyango，轉會費為2200萬鎊，並簽下一份為期五年的合約，打破了英冠聯賽的轉會費紀錄。',
       '交易已正式完成並獲韋斯咸確認。',
     ],
     source_url: [
@@ -62,13 +62,13 @@ const articles = [
   {
     id: 'taiwo-awoniyi',
     status: '接近完成',
-    player_name: '泰禾艾禾尼宜',
-    clubs_involved: '諾定咸森林 / 高雲地利',
-    headline_hk: '高雲地利接近簽入諾定咸森林前鋒泰禾艾禾尼宜',
-    lead: '高雲地利已與諾定咸森林就泰禾艾禾尼宜的轉會達成協議，交易將為永久轉會。',
+    player_name: 'Taiwo Awoniyi',
+    clubs_involved: 'Nottingham Forest / Coventry City',
+    headline_hk: '高雲地利接近簽入諾定咸森林前鋒 Awoniyi',
+    lead: '高雲地利已與諾定咸森林就 Taiwo Awoniyi 的轉會達成協議，交易將為永久轉會。',
     bullet_points: [
-      '高雲地利已與諾定咸森林就泰禾艾禾尼宜的轉會達成協議，交易將為永久轉會。',
-      '球員目前正在進行體測，有望成為高雲地利新前鋒。',
+      '高雲地利已與諾定咸森林就 Taiwo Awoniyi 的轉會達成協議，交易將為永久轉會。',
+      '深度測試正在進行中，有望成為高雲地利新前鋒。',
     ],
     source_url: [
       'https://www.skysports.com/football/live-blog/31771/12476234/transfer-centre-live-football-transfer-news-updates-and-rumours?postid=12232004#liveblog-body',
@@ -80,13 +80,13 @@ const articles = [
   {
     id: 'dai-amidaly',
     status: '接近完成',
-    player_name: '戴安美達利',
-    clubs_involved: '圖盧茲 / 新特蘭',
-    headline_hk: '新特蘭與圖盧茲達成協議簽入戴安美達利',
-    lead: '新特蘭已與圖盧茲就左閘戴安美達利的轉會達成口頭協議，轉會費為2800萬歐元。',
+    player_name: 'Dai Amidaly',
+    clubs_involved: 'Toulouse / Sunderland',
+    headline_hk: '新特蘭與圖盧茲達成協議簽入 Amidaly',
+    lead: '新特蘭已與圖盧茲就左閘 Dai Amidaly 的轉會達成口頭協議，轉會費為2800萬歐元。',
     bullet_points: [
-      '新特蘭已與圖盧茲就左閘戴安美達利的轉會達成口頭協議，轉會費為2800萬歐元，另加200萬歐元浮動條款。',
-      '新特蘭已安排球員前往進行體測，預計戴安美達利將在未來數天內完成加盟。',
+      '新特蘭已與圖盧茲就左閘 Dai Amidaly 的轉會達成口頭協議，轉會費為2800萬歐元，另加200萬歐元浮動條款。',
+      '新特蘭已安排球員前往進行體測，預計 Amidaly 將在未來數天內完成加盟。',
     ],
     source_url: [
       'https://www.skysports.com/football/live-blog/31771/12476234/transfer-centre-live-football-transfer-news-updates-and-rumours?postid=12231899#liveblog-body',
@@ -97,12 +97,12 @@ const articles = [
   {
     id: 'djed-spence',
     status: '已完成',
-    player_name: '迪捷史賓斯',
-    clubs_involved: '熱刺 / 國際米蘭',
-    headline_hk: '迪捷史賓斯完成轉會國際米蘭',
-    lead: '熱刺後衛迪捷史賓斯已完成以3000萬鎊（約3500萬歐元）轉會國際米蘭，簽約至2031年6月。',
+    player_name: 'Djed Spence',
+    clubs_involved: 'Tottenham Hotspur / Inter Milan',
+    headline_hk: '史賓斯完成轉會國際米蘭',
+    lead: '熱刺後衛 Djed Spence 已完成以3000萬鎊（約3500萬歐元）轉會國際米蘭，簽約至2031年6月。',
     bullet_points: [
-      '熱刺後衛迪捷史賓斯已完成以3000萬鎊（約3500萬歐元）轉會國際米蘭，簽約至2031年6月。',
+      '熱刺後衛 Djed Spence 已完成以3000萬鎊（約3500萬歐元）轉會國際米蘭，簽約至2031年6月。',
       '球員已向熱刺告別，國際米蘭亦已官方確認交易完成。',
     ],
     source_url: [
@@ -119,12 +119,12 @@ const articles = [
   {
     id: 'james-penix',
     status: '已完成 (借用)',
-    player_name: '占士賓尼思',
-    clubs_involved: 'AEK雅典 / 格拉斯哥流浪',
-    headline_hk: '格拉斯哥流浪完成借用占士賓尼思',
-    lead: '格拉斯哥流浪已從AEK雅典借用占士賓尼思，並設有買斷條款。',
+    player_name: 'James Penix',
+    clubs_involved: 'AEK Athens / Rangers',
+    headline_hk: '格拉斯哥流浪完成借用 Penix',
+    lead: '格拉斯哥流浪已從 AEK 雅典借用 James Penix，並設有買斷條款。',
     bullet_points: [
-      '格拉斯哥流浪已從AEK雅典借用占士賓尼思，並設有買斷條款。',
+      '格拉斯哥流浪已從 AEK 雅典借用 James Penix，並設有買斷條款。',
       '球員已完成體測並簽署所有文件，格拉斯哥流浪已確認這宗借用交易。',
     ],
     source_url: [
@@ -137,12 +137,12 @@ const articles = [
   {
     id: 'suzuki-zion',
     status: '談判中',
-    player_name: '鈴木彩艷',
-    clubs_involved: '帕爾馬 / 阿士東維拉',
+    player_name: 'Zion Suzuki',
+    clubs_involved: 'Parma / Aston Villa',
     headline_hk: '鈴木彩艷轉會巴黎聖日耳門告吹，阿士東維拉介入爭奪',
-    lead: '鈴木彩艷原定以3500萬歐元轉會巴黎聖日耳門，但因球員方佣金問題，交易最終告吹。',
+    lead: 'Zion Suzuki 原定以3500萬歐元轉會巴黎聖日耳門，但因球員方佣金問題，交易最終告吹。',
     bullet_points: [
-      '鈴木彩艷原定以3500萬歐元轉會巴黎聖日耳門，但因球員方佣金問題，交易最終告吹。巴黎聖日耳門甚至已安排私人飛機接載球員進行體測。',
+      'Zion Suzuki 原定以3500萬歐元轉會巴黎聖日耳門，但因球員方佣金問題，交易最終告吹。巴黎聖日耳門甚至已安排私人飛機接載球員進行體測。',
       '阿士東維拉現已正式接觸帕爾馬及球員方，準備匹配巴黎聖日耳門當初超過3000萬歐元的報價，目前談判正在進行。',
     ],
     source_url: [
@@ -167,12 +167,12 @@ const articles = [
   {
     id: 'nestry-eilankunza',
     status: '已完成',
-    player_name: '尼斯特利伊蘭昆達',
-    clubs_involved: '屈福特 / 士砵亭',
-    headline_hk: '尼斯特利伊蘭昆達加盟士砵亭，設高額解約金條款',
-    lead: '屈福特前鋒尼斯特利伊蘭昆達已以1700萬鎊轉會士砵亭，簽約五年。',
+    player_name: 'Nestry Eilankunza',
+    clubs_involved: 'Watford / Sporting CP',
+    headline_hk: '伊蘭昆達加盟士砵亭，設高額解約金條款',
+    lead: '屈福特前鋒 Nestry Eilankunza 已以1700萬鎊轉會士砵亭，簽約五年。',
     bullet_points: [
-      '屈福特前鋒尼斯特利伊蘭昆達已以1700萬鎊轉會士砵亭，簽約五年，合約中包含一條6850萬鎊的解約金條款。',
+      '屈福特前鋒 Nestry Eilankunza 已以1700萬鎊轉會士砵亭，簽約五年，合約中包含一條6850萬鎊的解約金條款。',
       '士砵亭已確認簽入該球員。',
     ],
     source_url: [
@@ -183,12 +183,12 @@ const articles = [
   {
     id: 'amad-didi',
     status: '接近完成',
-    player_name: '亞馬迪迪',
-    clubs_involved: '賓菲加 / 紐卡素',
-    headline_hk: '紐卡素接近完成賓菲加右閘亞馬迪迪的轉會',
-    lead: '紐卡素已與賓菲加就亞馬迪迪的轉會達成3500萬歐元的協議，並包含未來轉售條款。',
+    player_name: 'Amad Diallo',
+    clubs_involved: 'Benfica / Newcastle United',
+    headline_hk: '紐卡素接近完成賓菲加右閘迪亞路的轉會',
+    lead: '紐卡素已與賓菲加就 Amad Diallo 的轉會達成3500萬歐元的協議，並包含未來轉售條款。',
     bullet_points: [
-      '紐卡素已與賓菲加就亞馬迪迪的轉會達成3500萬歐元的協議，並包含未來轉售條款。儘管賓菲加希望留人，但球員本人將加盟紐卡素視為首要目標。',
+      '紐卡素已與賓菲加就 Amad Diallo 的轉會達成3500萬歐元的協議，並包含未來轉售條款。雖然賓菲加希望留人，但球員本人將加盟紐卡素視為首要目標。',
       '雙方已進入最後階段談判，預計交易很快將完成。',
     ],
     source_url: [
@@ -207,12 +207,12 @@ const articles = [
   {
     id: 'taylor-harwood-bellis',
     status: '報價被拒',
-    player_name: '泰萊夏活比里斯',
-    clubs_involved: '修咸頓 / 賓菲加',
-    headline_hk: '修咸頓拒絕賓菲加為泰萊夏活比里斯提出的2000萬歐元報價',
-    lead: '賓菲加已向修咸頓提出2000萬歐元報價，希望簽下24歲中堅泰萊夏活比里斯，但報價未達估值而被拒絕。',
+    player_name: 'Taylor Harwood-Bellis',
+    clubs_involved: 'Southampton / Benfica',
+    headline_hk: '修咸頓拒絕賓菲加為夏活比里斯提出的2000萬歐元報價',
+    lead: '賓菲加已向修咸頓提出2000萬歐元報價，希望簽下24歲中堅 Taylor Harwood-Bellis，但報價未達估值而被拒絕。',
     bullet_points: [
-      '賓菲加已向修咸頓提出2000萬歐元報價，希望簽下24歲中堅泰萊夏活比里斯，但報價未達修咸頓的估值而被拒絕。',
+      '賓菲加已向修咸頓提出2000萬歐元報價，希望簽下24歲中堅 Taylor Harwood-Bellis，但報價未達修咸頓的估值而被拒絕。',
       '修咸頓對轉會持開放態度，但前提是價格合適。球員本人亦對加盟賓菲加感興趣。',
     ],
     source_url: [
@@ -225,12 +225,12 @@ const articles = [
   {
     id: 'calvin-scanlon',
     status: '已完成 (借用)',
-    player_name: '卡林史簡倫',
-    clubs_involved: '利物浦 / 卡迪夫城',
-    headline_hk: '利物浦的卡林史簡倫借用回歸卡迪夫城',
-    lead: '利物浦的卡林史簡倫已以借用形式回歸卡迪夫城，為期一個賽季。',
+    player_name: 'Calvin Scanlon',
+    clubs_involved: 'Liverpool / Cardiff City',
+    headline_hk: '利物浦的 Scanlon 借用回歸卡迪夫城',
+    lead: '利物浦的 Calvin Scanlon 已以借用形式回歸卡迪夫城，為期一個賽季。',
     bullet_points: [
-      '利物浦的卡林史簡倫已以借用形式回歸卡迪夫城，為期一個賽季。',
+      '利物浦的 Calvin Scanlon 已以借用形式回歸卡迪夫城，為期一個賽季。',
       '卡迪夫城已再次簽下該球員。',
     ],
     source_url: [
@@ -241,12 +241,12 @@ const articles = [
   {
     id: 'ashley-phillips',
     status: '已完成',
-    player_name: '艾殊利菲臘斯',
-    clubs_involved: '熱刺 / 米杜士堡',
-    headline_hk: '艾殊利菲臘斯從熱刺轉會米杜士堡',
-    lead: '艾殊利菲臘斯已從熱刺轉會至米杜士堡，具體轉會費未有披露。',
+    player_name: 'Ashley Phillips',
+    clubs_involved: 'Tottenham Hotspur / Middlesbrough',
+    headline_hk: '菲臘斯從熱刺轉會米杜士堡',
+    lead: 'Ashley Phillips 已從熱刺轉會至米杜士堡，具體轉會費未有披露。',
     bullet_points: [
-      '艾殊利菲臘斯已從熱刺轉會至米杜士堡，具體轉會費未有披露。',
+      'Ashley Phillips 已從熱刺轉會至米杜士堡，具體轉會費未有披露。',
       '米杜士堡已確認簽下這名球員。',
     ],
     source_url: [
@@ -257,12 +257,12 @@ const articles = [
   {
     id: 'joel-gelhardt',
     status: '已完成',
-    player_name: '祖爾基爾赫特',
-    clubs_involved: '列斯聯 / 侯城',
-    headline_hk: '祖爾基爾赫特以650萬鎊加盟侯城',
-    lead: '祖爾基爾赫特已以650萬鎊完成轉會侯城，這是他再次永久回歸該俱樂部。',
+    player_name: 'Joel Gelhardt',
+    clubs_involved: 'Leeds United / Hull City',
+    headline_hk: '基爾赫特以650萬鎊加盟侯城',
+    lead: 'Joel Gelhardt 已以650萬鎊完成轉會侯城，這是他再次永久回歸該俱樂部。',
     bullet_points: [
-      '祖爾基爾赫特已以650萬鎊完成轉會侯城，這是他再次永久回歸該俱樂部。',
+      'Joel Gelhardt 已以650萬鎊完成轉會侯城，這是他再次永久回歸該俱樂部。',
       '侯城已確認簽下該球員。',
     ],
     source_url: [
@@ -273,12 +273,12 @@ const articles = [
   {
     id: 'ferran-torres',
     status: '已完成',
-    player_name: '費倫托利斯',
-    clubs_involved: '巴塞隆拿 / 巴黎聖日耳門',
+    player_name: 'Ferran Torres',
+    clubs_involved: 'Barcelona / Paris Saint-Germain',
     headline_hk: '巴黎聖日耳門正式簽入費倫托利斯',
-    lead: '巴黎聖日耳門已從巴塞隆拿簽入費倫托利斯，轉會費為5000萬歐元，合約簽至2031年6月。',
+    lead: '巴黎聖日耳門已從巴塞隆拿簽入 Ferran Torres，轉會費為5000萬歐元，合約簽至2031年6月。',
     bullet_points: [
-      '巴黎聖日耳門已從巴塞隆拿簽入費倫托利斯，轉會費為5000萬歐元，合約簽至2031年6月。',
+      '巴黎聖日耳門已從巴塞隆拿簽入 Ferran Torres，轉會費為5000萬歐元，合約簽至2031年6月。',
       '交易已獲官方確認，費倫托利斯表示巴黎聖日耳門是贏得歐聯的理想球會。',
     ],
     source_url: [
@@ -294,12 +294,12 @@ const articles = [
   {
     id: 'lucas-goudreaux',
     status: '已完成',
-    player_name: '盧卡斯古拿杜亞夫',
-    clubs_involved: 'RB薩爾斯堡 / 侯城',
-    headline_hk: '侯城完成簽入盧卡斯古拿杜亞夫',
-    lead: '侯城已從RB薩爾斯堡簽入盧卡斯古拿杜亞夫，具體轉會費未有披露。',
+    player_name: 'Lucas Goudreaux',
+    clubs_involved: 'RB Salzburg / Hull City',
+    headline_hk: '侯城完成簽入古拿杜亞夫',
+    lead: '侯城已從 RB 薩爾斯堡簽入 Lucas Goudreaux，具體轉會費未有披露。',
     bullet_points: [
-      '侯城已從RB薩爾斯堡簽入盧卡斯古拿杜亞夫，具體轉會費未有披露。',
+      '侯城已從 RB 薩爾斯堡簽入 Lucas Goudreaux，具體轉會費未有披露。',
       '侯城已確認簽下該球員。',
     ],
     source_url: [
@@ -310,12 +310,12 @@ const articles = [
   {
     id: 'aaron-kamara',
     status: '已完成',
-    player_name: '艾倫卡利尼',
-    clubs_involved: '聖基萊斯聯 / 水晶宮',
-    headline_hk: '水晶宮簽入艾倫卡利尼',
-    lead: '水晶宮已與聖基萊斯聯完成簽下艾倫卡利尼，具體轉會費未有披露。',
+    player_name: 'Aaron Kamara',
+    clubs_involved: 'Union Saint-Gilloise / Crystal Palace',
+    headline_hk: '水晶宮簽入卡馬拉',
+    lead: '水晶宮已與聖基萊斯聯完成簽下 Aaron Kamara，具體轉會費未有披露。',
     bullet_points: [
-      '水晶宮已與聖基萊斯聯完成簽下艾倫卡利尼，具體轉會費未有披露。',
+      '水晶宮已與聖基萊斯聯完成簽下 Aaron Kamara，具體轉會費未有披露。',
       '球員對加盟感到興奮，並期待在英超展開新挑戰。',
     ],
     source_url: [
@@ -327,12 +327,12 @@ const articles = [
   {
     id: 'cristian-romero',
     status: '已完成',
-    player_name: '基斯甸羅美路',
-    clubs_involved: '熱刺 / 馬德里體育會',
-    headline_hk: '馬德里體育會確認簽入基斯甸羅美路',
-    lead: '馬德里體育會已確認簽入基斯甸羅美路，具體轉會費及合約細節未有披露。',
+    player_name: 'Cristian Romero',
+    clubs_involved: 'Tottenham Hotspur / Atletico Madrid',
+    headline_hk: '馬德里體育會確認簽入羅美路',
+    lead: '馬德里體育會已確認簽入 Cristian Romero，具體轉會費及合約細節未有披露。',
     bullet_points: [
-      '馬德里體育會已確認簽入基斯甸羅美路，具體轉會費及合約細節未有披露。',
+      '馬德里體育會已確認簽入 Cristian Romero，具體轉會費及合約細節未有披露。',
       '交易已獲馬德里體育會官方確認。',
     ],
     source_url: [
@@ -343,13 +343,13 @@ const articles = [
   {
     id: 'nico-elveedi',
     status: '接近完成',
-    player_name: '尼高艾維迪',
-    clubs_involved: '慕遜加柏 / 列斯聯',
-    headline_hk: '列斯聯與慕遜加柏就尼高艾維迪轉會達成協議',
-    lead: '列斯聯已與慕遜加柏就尼高艾維迪的轉會費達成協議，交易價值680萬鎊，另加浮動條款。',
+    player_name: 'Nico Elvedi',
+    clubs_involved: 'Borussia Monchengladbach / Leeds United',
+    headline_hk: '列斯聯與慕遜加柏就艾維迪轉會達成協議',
+    lead: '列斯聯已與慕遜加柏就 Nico Elvedi 的轉會費達成協議，交易價值680萬鎊，另加浮動條款。',
     bullet_points: [
-      '列斯聯已與慕遜加柏就尼高艾維迪的轉會費達成協議，交易價值680萬鎊，另加浮動條款。',
-      '尼高艾維迪今日未有為慕遜加柏上陣，預計將會加盟列斯聯。',
+      '列斯聯已與慕遜加柏就 Nico Elvedi 的轉會費達成協議，交易價值680萬鎊，另加浮動條款。',
+      '艾維迪今日未有為慕遜加柏上陣，預計將會加盟列斯聯。',
     ],
     source_url: [
       'https://www.skysports.com/football/live-blog/31771/12476234/transfer-centre-live-football-transfer-news-updates-and-rumours?postid=12230108#liveblog-body',
@@ -360,12 +360,12 @@ const articles = [
   {
     id: 'mateo-rugel',
     status: '已完成',
-    player_name: '馬迪奧魯格利',
-    clubs_involved: '馬德里體育會 / 阿士東維拉',
-    headline_hk: '阿士東維拉完成簽入馬迪奧魯格利',
-    lead: '阿士東維拉與馬德里體育會已完成馬迪奧魯格利的轉會文件交換，交易價值2500萬歐元。',
+    player_name: 'Mateo Rugel',
+    clubs_involved: 'Atletico Madrid / Aston Villa',
+    headline_hk: '阿士東維拉完成簽入魯格利',
+    lead: '阿士東維拉與馬德里體育會已完成 Mateo Rugel 的轉會文件交換，交易價值2500萬歐元。',
     bullet_points: [
-      '阿士東維拉與馬德里體育會已完成馬迪奧魯格利的轉會文件交換，交易價值2500萬歐元，另加150萬歐元浮動條款。',
+      '阿士東維拉與馬德里體育會已完成 Mateo Rugel 的轉會文件交換，交易價值2500萬歐元，另加150萬歐元浮動條款。',
       '轉會已獲確認。',
     ],
     source_url: ['https://x.com/FabrizioRomano/status/2088634485113798977'],
@@ -374,13 +374,13 @@ const articles = [
   {
     id: 'ayoub-bouaddi',
     status: '談判中',
-    player_name: '艾尤布布亞迪',
-    clubs_involved: '里爾 / 曼城',
-    headline_hk: '曼城與里爾就艾尤布布亞迪轉會進入最後談判',
-    lead: '曼城與里爾關於艾尤布布亞迪的談判已進入最後階段，他今日未有為里爾上陣。',
+    player_name: 'Ayyoub Bouaddi',
+    clubs_involved: 'Lille / Manchester City',
+    headline_hk: '曼城與里爾就布亞迪轉會進入最後談判',
+    lead: '曼城與里爾關於 Ayyoub Bouaddi 的談判已進入最後階段，他今日未有為里爾上陣。',
     bullet_points: [
-      '曼城與里爾關於艾尤布布亞迪的談判已進入最後階段，他今日未有為里爾上陣。',
-      '如果一切順利，艾尤布布亞迪預計將立即加盟曼城，而非等到2027年夏天。',
+      '曼城與里爾關於 Ayyoub Bouaddi 的談判已進入最後階段，他今日未有為里爾上陣。',
+      '如果一切順利，Ayyoub Bouaddi 預計將立即加盟曼城，而非等到2027年夏天。',
     ],
     source_url: [
       'https://x.com/FabrizioRomano/status/2088634049392681184',
@@ -394,12 +394,12 @@ const articles = [
   {
     id: 'darwin-guagua',
     status: '已完成 (借用)',
-    player_name: '達爾文瓜瓜',
-    clubs_involved: '獨立山谷 / 賓福特',
-    headline_hk: '賓福特簽入達爾文瓜瓜並借用至梅利達',
-    lead: '賓福特已與獨立山谷就簽入18歲中場達爾文瓜瓜達成口頭協議，交易將把他帶到歐洲。',
+    player_name: 'Darwin Guagua',
+    clubs_involved: 'Independiente del Valle / Brentford',
+    headline_hk: '賓福特簽入瓜瓜並借用至梅利達',
+    lead: '賓福特已與獨立山谷就簽入18歲中場 Darwin Guagua 達成口頭協議，交易將把他帶到歐洲。',
     bullet_points: [
-      '賓福特已與獨立山谷就簽入18歲中場達爾文瓜瓜達成口頭協議，交易將把他帶到歐洲。',
+      '賓福特已與獨立山谷就簽入18歲中場 Darwin Guagua 達成口頭協議，交易將把他帶到歐洲。',
       '該球員已簽署正式文件，並隨即被借用至西班牙球會梅利達。',
     ],
     source_url: [
@@ -415,12 +415,12 @@ const articles = [
   {
     id: 'chelsea-three',
     status: '可能離隊',
-    player_name: '尼高拉斯積臣 / 利安迪立 / 托仙艾達拉比奧路',
-    clubs_involved: '車路士',
-    headline_hk: '車路士三將積臣、迪立及艾達拉比奧路可能離隊',
-    lead: '尼高拉斯積臣、利安迪立和托仙艾達拉比奧路今日均未入選車路士陣容參加季前賽。',
+    player_name: 'Nicolas Jackson / Lee Doel / Tosin Adarabioyo',
+    clubs_involved: 'Chelsea',
+    headline_hk: '車路士三將積遜、杜爾及艾達拉比奧路可能離隊',
+    lead: 'Nicolas Jackson、Lee Doel 和 Tosin Adarabioyo 今日均未入選車路士陣容參加季前賽。',
     bullet_points: [
-      '尼高拉斯積臣、利安迪立和托仙艾達拉比奧路今日均未入選車路士陣容參加季前賽。',
+      'Nicolas Jackson、Lee Doel 和 Tosin Adarabioyo 今日均未入選車路士陣容參加季前賽。',
       '他們三人都可能在轉會窗關閉前離開車路士。',
     ],
     source_url: [
@@ -433,12 +433,12 @@ const articles = [
   {
     id: 'joao-palhinha',
     status: '轉會動向未明',
-    player_name: '祖奧柏連拿',
-    clubs_involved: '富咸 / 紐卡素 / 拜仁慕尼黑 / 賓菲加',
+    player_name: 'João Palhinha',
+    clubs_involved: 'Fulham / Newcastle United / Bayern Munich / Benfica',
     headline_hk: '祖奧柏連拿前途未卜，紐卡素與賓菲加均有意',
-    lead: '祖奧柏連拿的未來仍未明朗，此前拜仁慕尼黑拒絕了阿士東維拉的報價。',
+    lead: 'João Palhinha 的未來仍未明朗，此前拜仁慕尼黑拒絕了阿士東維拉的報價。',
     bullet_points: [
-      '祖奧柏連拿的未來仍未明朗，此前拜仁慕尼黑拒絕了阿士東維拉的報價。',
+      'João Palhinha 的未來仍未明朗，此前拜仁慕尼黑拒絕了阿士東維拉的報價。',
       '據悉，紐卡素在過去24小時內再次接觸柏連拿，賓菲加也對他有興趣，如果他未能留在英超。',
     ],
     source_url: [
@@ -450,12 +450,12 @@ const articles = [
   {
     id: 'teun-koopmeiners',
     status: '接近完成',
-    player_name: '泰積尼賴恩達斯',
-    clubs_involved: 'AC米蘭 / 卡迪斯亞',
-    headline_hk: '卡迪斯亞以6100萬歐元簽入泰積尼賴恩達斯',
-    lead: '卡迪斯亞與AC米蘭就泰積尼賴恩達斯的轉會已準備交換文件，轉會費已確認為6100萬歐元。',
+    player_name: 'Teun Koopmeiners',
+    clubs_involved: 'AC Milan / Al-Qadsiah',
+    headline_hk: '艾加拉迪西亞以6100萬歐元簽入古普美拿斯',
+    lead: '艾加拉迪西亞與AC米蘭就 Teun Koopmeiners 的轉會已準備交換文件，轉會費已確認為6100萬歐元。',
     bullet_points: [
-      '卡迪斯亞與AC米蘭就泰積尼賴恩達斯的轉會已準備交換文件，轉會費已確認為6100萬歐元。',
+      '艾加拉迪西亞與AC米蘭就 Teun Koopmeiners 的轉會已準備交換文件，轉會費已確認為6100萬歐元。',
       '交易接近完成，預計將有官方公佈。',
     ],
     source_url: ['https://x.com/FabrizioRomano/status/2088497160878706979'],
@@ -464,12 +464,12 @@ const articles = [
   {
     id: 'ahmeh-hozier',
     status: '有意收購',
-    player_name: '艾尼爾阿美賀錫',
-    clubs_involved: '錫菲聯 / 修咸頓',
-    headline_hk: '修咸頓等球會對錫菲聯後衛艾尼爾阿美賀錫感興趣',
-    lead: '修咸頓是其中一支對錫菲聯後衛艾尼爾阿美賀錫感興趣的球會，球員可能在今夏離隊。',
+    player_name: 'Ameer Hozier',
+    clubs_involved: 'Sheffield United / Southampton',
+    headline_hk: '修咸頓等球會對錫菲聯後衛荷素爾感興趣',
+    lead: '修咸頓是其中一支對錫菲聯後衛 Ameer Hozier 感興趣的球會，球員可能在今夏離隊。',
     bullet_points: [
-      '修咸頓是其中一支對錫菲聯後衛艾尼爾阿美賀錫感興趣的球會，球員可能在今夏離隊。',
+      '修咸頓是其中一支對錫菲聯後衛 Ameer Hozier 感興趣的球會，球員可能在今夏離隊。',
       '修咸頓已與球員進行初步接觸，其他球會亦有興趣爭奪。',
     ],
     source_url: [
