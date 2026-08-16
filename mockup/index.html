@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>今日轉會情報報 · Argus Eye</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="masthead">
+  <label class="theme-btn" id="themeToggle" title="切換深色模式">
+    <input type="checkbox" aria-label="切換深色模式">
+    <span class="track">
+      <svg class="ic ic-moon" viewBox="0 0 12 12" aria-hidden="true"><path d="M6.5 1a5 5 0 1 0 4.5 5A4 4 0 0 1 6.5 1Z"/></svg>
+      <svg class="ic ic-sun" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="2.4"/><g stroke-linecap="round"><g><line x1="6" y1="0.6" x2="6" y2="2.6"/><line x1="6" y1="9.4" x2="6" y2="11.4"/><line x1="0.6" y1="6" x2="2.6" y2="6"/><line x1="9.4" y1="6" x2="11.4" y2="6"/></g><g transform="rotate(45 6 6)"><line x1="6" y1="0.6" x2="6" y2="2.6"/><line x1="6" y1="9.4" x2="6" y2="11.4"/><line x1="0.6" y1="6" x2="2.6" y2="6"/><line x1="9.4" y1="6" x2="11.4" y2="6"/></g></g></svg>
+      <span class="knob">
+        <svg class="ic ic-knob-moon" viewBox="0 0 12 12" aria-hidden="true"><path d="M6.5 1a5 5 0 1 0 4.5 5A4 4 0 0 1 6.5 1Z"/></svg>
+        <svg class="ic ic-knob-sun" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="2.4"/><g stroke-linecap="round"><g><line x1="6" y1="0.6" x2="6" y2="2.6"/><line x1="6" y1="9.4" x2="6" y2="11.4"/><line x1="0.6" y1="6" x2="2.6" y2="6"/><line x1="9.4" y1="6" x2="11.4" y2="6"/></g><g transform="rotate(45 6 6)"><line x1="6" y1="0.6" x2="6" y2="2.6"/><line x1="6" y1="9.4" x2="6" y2="11.4"/><line x1="0.6" y1="6" x2="2.6" y2="6"/><line x1="9.4" y1="6" x2="11.4" y2="6"/></g></g></svg>
+      </span>
+    </span>
+  </label>
+  <p class="edition">星期五 · 2026年8月16日 · 轉會窗特刊</p>
+  <h1 class="paper-title">轉會情報報</h1>
+  <p class="tagline">每日追蹤各大班霸動向 · 官宣 / 傳聞 / 斟介 一目了然</p>
+  <div class="toolbar">
+    <input id="search" type="search" placeholder="搜尋球員、球會、標題…" aria-label="搜尋轉會">
+  </div>
+  <div id="filters" class="filters"></div>
+</header>
+
+<main id="home" class="view">
+  <section class="lead-story" id="lead" aria-label="頭條"></section>
+
+  <div class="news-grid" id="grid"></div>
+</main>
+
+<section id="list" class="view" hidden>
+  <div class="list-head">
+    <p class="list-count" id="listCount"></p>
+  </div>
+  <div id="listItems" class="list"></div>
+  <p id="listEmpty" class="empty" hidden>無符合嘅結果</p>
+</section>
+
+<section id="article" class="view" hidden>
+  <a href="#home" class="back" id="back">← 返回報攤</a>
+  <article class="story">
+    <div class="story-main">
+      <div class="pills">
+        <span class="kicker" id="a-status"></span>
+        <span class="kicker accent" id="a-player"></span>
+      </div>
+      <h2 class="story-headline" id="a-headline"></h2>
+      <div class="story-hero" id="a-hero"></div>
+      <p class="story-lede" id="a-lead"></p>
+      <div class="story-gallery" id="a-gallery"></div>
+    </div>
+    <aside class="story-side">
+      <h3>消息重點</h3>
+      <ul class="bullets" id="a-bullets"></ul>
+      <h3>相關來源</h3>
+      <div class="sources" id="a-sources"></div>
+    </aside>
+  </article>
+</section>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
