@@ -244,25 +244,18 @@ a { color: inherit; text-decoration: none }
 
 .filters {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: 6px;
-  padding-bottom: 12px;
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 16px 12px;
 }
 
 .filter-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.filter-label {
-  font-family: var(--sans);
-  font-size: 11px;
-  color: var(--ink-soft);
-  letter-spacing: 0.06em;
+  display: contents;
 }
 
 .filter-btn {
@@ -537,6 +530,22 @@ a { color: inherit; text-decoration: none }
 /* ---------- responsive ---------- */
 
 @media (max-width: 760px) {
+  .filters {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .filter-row {
+    display: flex;
+    flex-wrap: nowrap;
+    flex: 0 0 max-content;
+  }
+
+  .filter-btn {
+    flex: 0 0 auto;
+  }
+
   .card-lead { grid-template-columns: 1fr }
 
   .story { grid-template-columns: 1fr }
@@ -634,9 +643,9 @@ const articles = ${dataJson}
   const filters = { status: 'ALL', type: 'ALL', off: 'ALL' }
 
   const DIM_ROWS = [
-    { key: 'status', label: '進度', options: ['Rumor', 'Negotiation', 'Confirmed'] },
-    { key: 'type', label: '類別', options: ['Loan', 'Permanent'] },
-    { key: 'off', label: '狀態', options: ['Deals off'] },
+    { key: 'status', options: ['Rumor', 'Negotiation', 'Confirmed'] },
+    { key: 'type', options: ['Loan', 'Permanent'] },
+    { key: 'off', options: ['Deals off'] },
   ]
 
   const palette = [
@@ -776,57 +785,56 @@ const articles = ${dataJson}
   }
 
   function buildFilters() {
-    DIM_ROWS.forEach(function (row) {
-      const label = document.createElement('span')
-      label.className = 'filter-label'
-      label.textContent = row.label
-      rowBox.appendChild(label)
-      rowBox.appendChild(createRow(row))
-    })
-  }
-
-  function createRow(row) {
     const box = document.createElement('span')
     box.className = 'filter-row'
-    box.dataset.dim = row.key
+    box.dataset.dim = 'all'
 
-    const allBtn = makeBtn('全部', 'ALL')
+    const allBtn = makeBtn('全部', 'ALL', 'all')
     allBtn.classList.add('active')
     allBtn.style.setProperty('--fc', 'var(--ink-soft)')
     box.appendChild(allBtn)
 
-    row.options.forEach(function (opt) {
-      const btn = makeBtn(opt, opt)
-      btn.style.setProperty('--fc', colorForStatus(opt))
-      box.appendChild(btn)
+    DIM_ROWS.forEach(function (row) {
+      row.options.forEach(function (opt) {
+        const btn = makeBtn(opt, opt, row.key)
+        btn.style.setProperty('--fc', colorForStatus(opt))
+        box.appendChild(btn)
+      })
     })
-    return box
+    rowBox.appendChild(box)
   }
 
-  function makeBtn(labelText, value) {
+  function makeBtn(labelText, value, key) {
     const btn = document.createElement('button')
     btn.type = 'button'
     btn.className = 'filter-btn'
     btn.textContent = labelText
     btn.dataset.id = value
+    btn.dataset.dim = key
     btn.addEventListener('click', function () {
-      setActiveRow(rowFor(btn), value)
+      setActiveFilter(key, value)
       if (value === 'ALL') searchInput.value = ''
       apply()
     })
     return btn
   }
 
-  function rowFor(btn) {
-    return btn.closest('.filter-row')
-  }
+  function setActiveFilter(key, value) {
+    if (key === 'all') {
+      filters.status = 'ALL'
+      filters.type = 'ALL'
+      filters.off = 'ALL'
+      filterBox.querySelectorAll('.filter-btn').forEach(function (b) {
+        b.classList.toggle('active', b.dataset.id === 'ALL')
+      })
+      return
+    }
 
-  function setActiveRow(row, value) {
-    const key = row.dataset.dim
     filters[key] = value
-    row.querySelectorAll('.filter-btn').forEach(function (b) {
+    filterBox.querySelectorAll('.filter-btn[data-dim="' + key + '"]').forEach(function (b) {
       b.classList.toggle('active', b.dataset.id === value)
     })
+    filterBox.querySelector('.filter-btn[data-dim="all"]').classList.toggle('active', !anyFilterActive())
   }
 
   function anyFilterActive() {
@@ -947,28 +955,21 @@ const articles = ${dataJson}
   }
 
   function filterByStatus(status) {
-    const row = rowBox.querySelector('[data-dim="status"]')
-    setActiveRow(row, status)
+    setActiveFilter('status', status)
     searchInput.value = ''
     location.hash = 'home'
     apply()
   }
 
   function filterByType(type) {
-    const row = rowBox.querySelector('[data-dim="type"]')
-    setActiveRow(row, type)
+    setActiveFilter('type', type)
     searchInput.value = ''
     location.hash = 'home'
     apply()
   }
 
   function filterByPlayer(player) {
-    filters.status = 'ALL'
-    filters.type = 'ALL'
-    filters.off = 'ALL'
-    setActiveRow(rowBox.querySelector('[data-dim="status"]'), 'ALL')
-    setActiveRow(rowBox.querySelector('[data-dim="type"]'), 'ALL')
-    setActiveRow(rowBox.querySelector('[data-dim="off"]'), 'ALL')
+    setActiveFilter('all', 'ALL')
     searchInput.value = player
     location.hash = 'home'
     apply()
