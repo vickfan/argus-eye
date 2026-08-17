@@ -692,7 +692,7 @@ const articles = ${dataJson}
 
     cards.forEach(function (card) {
       const img = card.querySelector('img')
-      const span = img ? (img.naturalWidth / Math.max(img.naturalHeight, 1) >= IMG_BREAKPOINT ? 2 : 1) : 1
+      const span = Math.min(img ? (img.naturalWidth / Math.max(img.naturalHeight, 1) >= IMG_BREAKPOINT ? 2 : 1) : 1, cols)
       const cardW = span * colW + (span - 1) * GAP
       card.style.width = cardW + 'px'
 
