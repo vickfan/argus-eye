@@ -540,6 +540,7 @@ a { color: inherit; text-decoration: none }
     display: flex;
     flex-wrap: nowrap;
     flex: 0 0 max-content;
+    gap: 6px;
   }
 
   .filter-btn {
