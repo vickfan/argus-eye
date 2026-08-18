@@ -35,7 +35,7 @@ const digestingPrompt = `
 傳入的每一條數據都帶有一個物理識別碼 "feed_id"（例如 "feed_0", "feed_1"）。
 
 核心任務：
-1. 請對數據進行去粗取精的提煉。所有「球員姓名 (player_name)」及「涉及球會 (clubs_involved)」必須保留原始英文原文（例如 player_name 寫 "Kylian Mbappé"、clubs_involved 寫 "Real Madrid / Al-Hilal"），切勿翻譯或粵語音譯成中文。中文只用在 headline_hk 與 bullet_points。（例如：Mbappé 唔好譯做 麥巴比、Chelsea 唔好譯做 車路士、Manchester United 唔好譯做 曼聯）。
+1. 請對數據進行去粗取精的提煉。所有「球員姓名 (player_name)」及「涉及球會 (clubs_involved)」必須保留原始英文原文（例如 player_name 寫 "Kylian Mbappé"、clubs_involved 寫 "Real Madrid / Al-Hilal"），切勿翻譯或粵語音譯成中文。headline_hk 及 bullet_points 內提及球員或球會時，同樣必須使用原始英文名稱，其他內容才使用廣東話。（例如：Mbappé 唔好譯做 麥巴比、Chelsea 唔好譯做 車路士、Manchester United 唔好譯做 曼聯）。
 2. 你必須嚴格歸納所有「轉會消息 (transfers)」。
 3. 每一條轉會消息需要行以下三個維度嘅分類，每個維度都要揀一個（全部用英文，不可自創、不可混合）：
    - "status" ← 轉會進度維度，三選一：
