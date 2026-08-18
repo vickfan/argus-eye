@@ -100,6 +100,9 @@ async function main() {
           deals_off: !!transfer.deals_off,
           headline_hk: transfer.headline_hk,
           bullet_points: transfer.bullet_points,
+          detail_content: Array.isArray(transfer.detail_content)
+            ? transfer.detail_content
+            : [],
           source_url: uniqueSourceUrls ?? [],
           media_urls: uniqueMediaUrls ?? [],
         }

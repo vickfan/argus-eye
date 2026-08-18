@@ -22,6 +22,7 @@ export function renderTransferPage(transfers) {
     headline_hk: t.headline_hk ?? '',
     lead: t.lead ?? (t.bullet_points || [])[0] ?? '',
     bullet_points: t.bullet_points || [],
+    detail_content: Array.isArray(t.detail_content) ? t.detail_content : [],
     source_url: t.source_url || [],
     media_urls: t.media_urls || [],
   }))
@@ -611,6 +612,7 @@ a { color: inherit; text-decoration: none }
       <div class="story-hero" id="a-hero"></div>
       <p class="story-lede" id="a-lead"></p>
       <div class="story-gallery" id="a-gallery"></div>
+      <div class="story-detail" id="a-detail"></div>
     </div>
     <aside class="story-side">
       <h3>消息重點</h3>
@@ -938,6 +940,10 @@ const articles = ${dataJson}
     document.getElementById('a-gallery').innerHTML = galleryUrls.length
       ? mediaMarkup(galleryUrls)
       : ''
+    document.getElementById('a-detail').innerHTML = (a.detail_content || [])
+      .filter(function (p) { return p != null && String(p).trim() })
+      .map(function (p) { return '<p>' + esc(p) + '</p>' })
+      .join('')
 
     document.getElementById('a-bullets').innerHTML = (a.bullet_points || [])
       .map(function (b) { return '<li>' + esc(b) + '</li>' })

@@ -62,6 +62,7 @@ export class DigestingAgent {
               },
               headline_hk: { type: Type.STRING },
               bullet_points: { type: Type.ARRAY, items: { type: Type.STRING } },
+              detail_content: { type: Type.ARRAY, items: { type: Type.STRING } },
               // 💡 這裡不需要叫 Gemini 回傳 source_url 欄位了，我們在外層自己接
             },
             required: [
@@ -73,6 +74,7 @@ export class DigestingAgent {
               'deals_off',
               'headline_hk',
               'bullet_points',
+              'detail_content',
             ],
           },
         },
