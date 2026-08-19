@@ -27,10 +27,6 @@ export function renderTransferPage(transfers) {
     media_urls: t.media_urls || [],
   }))
 
-  const now = new Date()
-  const week = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
-  const edition = `${week[now.getDay()]} · ${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日 · 轉會窗特刊`
-
   const dataJson = JSON.stringify(articles).replace(/</g, '\\u003c')
 
   const gridInitial = count === 0 ? '<p class="empty">今日無轉會消息</p>' : ''
@@ -576,7 +572,7 @@ a { color: inherit; text-decoration: none }
       </span>
     </span>
   </label>
-  <p class="edition">${edition}</p>
+  <p class="edition" id="edition"></p>
   <h1 class="paper-title">轉會情報報</h1>
   <p class="tagline">每日追蹤各大班霸動向 · 官宣 / 傳聞 / 斟介 一目了然</p>
   <div class="toolbar">
@@ -639,6 +635,10 @@ const articles = ${dataJson}
   const articleView = document.getElementById('article')
   const back = document.getElementById('back')
   const themeToggle = document.getElementById('themeToggle')
+  const edition = document.getElementById('edition')
+  const now = new Date()
+  const week = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+  edition.textContent = week[now.getDay()] + ' · ' + now.getFullYear() + '年' + (now.getMonth() + 1) + '月' + now.getDate() + '日 · 轉會窗特刊'
 
   const GAP = 20
   const IMG_BREAKPOINT = 1.4
